@@ -7,10 +7,11 @@ import {
   ShieldCheck,
   Quote,
 } from "lucide-react";
+import JoinCommunity from "../components/JoinCommunity";
 
 function HomePage() {
   return (
-    <div className="flex flex-col min-h-screen mt-12">
+    <div className="flex flex-col min-h-screen bg-white text-gray-900 dark:bg-gray-900 dark:text-white">
       {/* Hero Section */}
       <section
         className="relative bg-cover bg-center h-screen flex items-center justify-center"
@@ -18,8 +19,7 @@ function HomePage() {
           backgroundImage: "url('./assets/pexels-rdne-7683731.jpg')",
         }}
       >
-        <div className="absolute inset-0 bg-black/60" />{" "}
-        {/* Optional Overlay */}
+        <div className="absolute inset-0 bg-black/60" />
         <div className="relative z-10 text-white text-center px-4 max-w-2xl p-8 rounded-lg drop-shadow-lg">
           <h1 className="text-5xl md:text-8xl font-extrabold mb-6">
             Welcome to UniBazzar
@@ -38,9 +38,9 @@ function HomePage() {
       </section>
 
       {/* What You Can Do Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-6 text-center">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-14">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-14">
             What You Can Do with UniBazzar
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
@@ -65,23 +65,25 @@ function HomePage() {
             ].map((item, index) => (
               <div
                 key={index}
-                className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
+                className="bg-white dark:bg-gray-700 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
               >
                 {item.icon}
-                <h3 className="text-2xl font-semibold mt-6 mb-3 text-gray-900">
+                <h3 className="text-2xl font-semibold mt-6 mb-3 text-gray-900 dark:text-white">
                   {item.title}
                 </h3>
-                <p className="text-gray-600">{item.desc}</p>
+                <p className="text-gray-600 dark:text-gray-300">{item.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
+      <JoinCommunity />
+
       {/* How It Works Section */}
-      <section className="py-20 bg-gradient-to-r from-gray-50 via-white to-gray-100">
+      <section className="py-20 bg-gradient-to-r from-gray-50 via-white to-gray-100 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800">
         <div className="max-w-7xl mx-auto px-6 text-center">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-14">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-14">
             How It Works
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
@@ -99,20 +101,18 @@ function HomePage() {
               {
                 title: "Secure Payments",
                 desc: "Pay safely via Telebirr or trusted payment methods.",
-                icon: (
-                  <ShieldCheck className="w-16 h-16 text-blue-600 mx-auto" />
-                ),
+                icon: <ShieldCheck className="w-16 h-16 text-blue-600 mx-auto" />,
               },
             ].map((item, index) => (
               <div
                 key={index}
-                className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
+                className="bg-white dark:bg-gray-700 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
               >
                 {item.icon}
-                <h3 className="text-2xl font-semibold mt-6 mb-3 text-gray-900">
+                <h3 className="text-2xl font-semibold mt-6 mb-3 text-gray-900 dark:text-white">
                   {item.title}
                 </h3>
-                <p className="text-gray-600">{item.desc}</p>
+                <p className="text-gray-600 dark:text-gray-300">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -120,9 +120,9 @@ function HomePage() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="bg-gradient-to-r from-blue-50 to-white py-20">
+      <section className="bg-gradient-to-r from-blue-50 to-white dark:from-gray-700 dark:to-gray-800 py-20">
         <div className="max-w-7xl mx-auto px-6 text-center">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-14">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-14">
             What Our Users Say
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
@@ -148,12 +148,12 @@ function HomePage() {
             ].map((item, index) => (
               <div
                 key={index}
-                className="bg-gray-50 p-8 rounded-2xl shadow-md hover:shadow-lg transition duration-300 text-left"
+                className="bg-gray-50 dark:bg-gray-700 p-8 rounded-2xl shadow-md hover:shadow-lg transition duration-300 text-left"
               >
                 <Quote className="w-8 h-8 text-blue-500 mb-4" />
-                <p className="text-gray-700 italic mb-6">“{item.quote}”</p>
-                <p className="font-semibold text-gray-900">{item.name}</p>
-                <p className="text-sm text-gray-500">{item.university}</p>
+                <p className="text-gray-700 dark:text-gray-200 italic mb-6">“{item.quote}”</p>
+                <p className="font-semibold text-gray-900 dark:text-white">{item.name}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-300">{item.university}</p>
               </div>
             ))}
           </div>
