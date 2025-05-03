@@ -16,7 +16,6 @@ export default function Navbar() {
   const cartItems = useSelector((state) => state.cart?.cartItems || []);
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
-  // Initialize theme based on localStorage or system preference
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme === "dark") {
@@ -28,11 +27,7 @@ export default function Navbar() {
     } else {
       const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
       setIsDarkMode(prefersDark);
-      if (prefersDark) {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-      }
+      document.documentElement.classList.toggle("dark", prefersDark);
     }
   }, []);
 
@@ -73,18 +68,18 @@ export default function Navbar() {
             <div className="flex items-center gap-4">
               <button
                 type="button"
-                className="md:hidden text-gray-800 dark:text-gray-200"
+                className="lg:hidden text-gray-800 dark:text-gray-200"
                 onClick={() => setMobileMenuOpen(true)}
               >
                 <Bars3Icon className="h-6 w-6" />
               </button>
 
-              <Link to="/" className="text-2xl font-bold text-emerald-500">
+              <Link to="/" className="text-xl lg:text-2xl font-bold text-emerald-500">
                 UniBazzar
               </Link>
             </div>
 
-            <div className="hidden md:flex items-center gap-6">
+            <div className="hidden lg:flex items-center gap-6">
               {[...commonLinks, ...(user ? protectedLinks : [])].map((link) => (
                 <Link
                   key={link.name}
@@ -95,7 +90,6 @@ export default function Navbar() {
                 </Link>
               ))}
 
-              {/* Theme Toggle Button */}
               <button
                 onClick={toggleTheme}
                 className="text-2xl text-gray-800 dark:text-gray-300 hover:text-emerald-500 transition"
@@ -130,18 +124,8 @@ export default function Navbar() {
                 </>
               ) : (
                 <>
-                  <Link
-                    to="/login"
-                    className="hover:text-emerald-500 transition"
-                  >
-                    Login
-                  </Link>
-                  <Link
-                    to="/signup"
-                    className="bg-emerald-500 text-white px-4 py-1.5 rounded hover:bg-emerald-600 transition"
-                  >
-                    Sign Up
-                  </Link>
+                  <Link to="/login" className="hover:text-emerald-500 transition">Login</Link>
+                  <Link to="/signup" className="bg-emerald-500 text-white px-4 py-1.5 rounded hover:bg-emerald-600 transition">Sign Up</Link>
                 </>
               )}
             </div>
@@ -151,11 +135,7 @@ export default function Navbar() {
 
       {/* Mobile Drawer */}
       <Transition show={mobileMenuOpen} as={Fragment}>
-        <Dialog
-          as="div"
-          className="relative z-50 md:hidden"
-          onClose={setMobileMenuOpen}
-        >
+        <Dialog as="div" className="relative z-50 lg:hidden" onClose={setMobileMenuOpen}>
           <Transition.Child
             as={Fragment}
             enter="transition-opacity ease-out duration-200"
@@ -170,13 +150,8 @@ export default function Navbar() {
 
           <div className="fixed inset-y-0 left-0 w-64 bg-white dark:bg-gray-800 text-black dark:text-white p-4">
             <div className="flex justify-between items-center mb-4 border-b pb-2">
-              <span className="text-xl font-bold text-emerald-500">
-                UniBazzar
-              </span>
-              <button
-                onClick={() => setMobileMenuOpen(false)}
-                className="text-gray-800 dark:text-gray-300"
-              >
+              <span className="text-xl font-bold text-emerald-500">UniBazzar</span>
+              <button onClick={() => setMobileMenuOpen(false)} className="text-gray-800 dark:text-gray-300">
                 <XMarkIcon className="h-6 w-6" />
               </button>
             </div>
@@ -193,7 +168,6 @@ export default function Navbar() {
                 </Link>
               ))}
 
-              {/* Theme Toggle Button */}
               <button
                 onClick={toggleTheme}
                 className="text-2xl text-gray-800 dark:text-gray-300 hover:text-emerald-500 transition"
@@ -227,20 +201,8 @@ export default function Navbar() {
                 </>
               ) : (
                 <>
-                  <Link
-                    to="/login"
-                    className="hover:text-emerald-500 transition"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Login
-                  </Link>
-                  <Link
-                    to="/signup"
-                    className="bg-emerald-500 text-white px-4 py-1 rounded hover:bg-emerald-600 transition"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Sign Up
-                  </Link>
+                  <Link to="/login" className="hover:text-emerald-500 transition" onClick={() => setMobileMenuOpen(false)}>Login</Link>
+                  <Link to="/signup" className="bg-emerald-500 text-white px-4 py-1 rounded hover:bg-emerald-600 transition" onClick={() => setMobileMenuOpen(false)}>Sign Up</Link>
                 </>
               )}
             </div>
