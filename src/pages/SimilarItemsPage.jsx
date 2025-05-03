@@ -23,10 +23,13 @@ function SimilarItemsPage() {
     }
   }, [id]);
 
-  if (!currentItem) return <div className="p-6 pt-16">Loading...</div>;
+  if (!currentItem)
+    return (
+      <div className="p-6 pt-16 text-gray-900 dark:text-white">Loading...</div>
+    );
 
   return (
-    <div className="p-6 pt-16">
+    <div className="p-6 pt-16 text-gray-900 dark:text-white">
       <h1 className="text-2xl font-bold mb-4">
         Similar Items to: {currentItem.title}
       </h1>
@@ -36,7 +39,7 @@ function SimilarItemsPage() {
             key={item.id}
             className="group relative w-full max-w-sm mx-auto overflow-visible"
           >
-            <CardBody className="relative bg-white p-4 rounded-xl shadow-lg hover:shadow-xl transition duration-300 flex flex-col overflow-visible">
+            <CardBody className="relative bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg hover:shadow-xl transition duration-300 flex flex-col overflow-visible">
               <CardItem>
                 <img
                   src={item.imageUrl}
@@ -45,13 +48,19 @@ function SimilarItemsPage() {
                 />
               </CardItem>
               <CardItem>
-                <h2 className="font-semibold text-lg text-gray-900 line-clamp-1 mb-1">{item.title}</h2>
-                <p className="text-sm text-gray-500 mb-2">{item.category}</p>
-                <p className="text-blue-600 font-bold text-lg mb-4">${item.price}</p>
+                <h2 className="font-semibold text-lg text-gray-900 dark:text-white line-clamp-1 mb-1">
+                  {item.title}
+                </h2>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
+                  {item.category}
+                </p>
+                <p className="text-blue-600 font-bold text-lg mb-4">
+                  ${item.price}
+                </p>
               </CardItem>
               <Link
                 to={`/listing/${item.id}`}
-                className="bg-black text-white px-3 py-2 rounded text-sm text-center hover:opacity-90 transition"
+                className="bg-black dark:bg-blue-600 text-white px-3 py-2 rounded text-sm text-center hover:opacity-90 transition"
               >
                 View Details
               </Link>

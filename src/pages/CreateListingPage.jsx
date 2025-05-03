@@ -31,12 +31,12 @@ function CreateListingPage() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-50">
+    <div className="flex justify-center items-center min-h-screen bg-gray-50 dark:bg-gray-900">
       <form 
         onSubmit={handleSubmit} 
-        className="bg-white p-8 rounded shadow-md w-full max-w-lg space-y-4"
+        className="bg-white dark:bg-gray-800 p-8 rounded shadow-md w-full max-w-lg space-y-4"
       >
-        <h2 className="text-2xl font-bold mb-4 text-center text-blue-600">Create New Listing</h2>
+        <h2 className="text-2xl font-bold mb-4 text-center text-blue-600 dark:text-blue-400">Create New Listing</h2>
 
         {/* Title */}
         <input
@@ -45,7 +45,7 @@ function CreateListingPage() {
           placeholder="Title (e.g., Used Physics Textbook)"
           value={formData.title}
           onChange={handleChange}
-          className="border p-3 w-full rounded"
+          className="border p-3 w-full rounded bg-white dark:bg-gray-700 dark:border-gray-600 text-black dark:text-white"
           required
         />
 
@@ -56,7 +56,7 @@ function CreateListingPage() {
           placeholder="Price (e.g., 300 birr)"
           value={formData.price}
           onChange={handleChange}
-          className="border p-3 w-full rounded"
+          className="border p-3 w-full rounded bg-white dark:bg-gray-700 dark:border-gray-600 text-black dark:text-white"
           required
         />
 
@@ -65,7 +65,7 @@ function CreateListingPage() {
           name="category"
           value={formData.category}
           onChange={handleChange}
-          className="border p-3 w-full rounded"
+          className="border p-3 w-full rounded bg-white dark:bg-gray-700 dark:border-gray-600 text-black dark:text-white"
           required
         >
           <option value="">Select Category</option>
@@ -82,7 +82,7 @@ function CreateListingPage() {
           placeholder="Write a brief description..."
           value={formData.description}
           onChange={handleChange}
-          className="border p-3 w-full rounded h-32"
+          className="border p-3 w-full rounded h-32 bg-white dark:bg-gray-700 dark:border-gray-600 text-black dark:text-white"
           required
         />
 
@@ -92,14 +92,14 @@ function CreateListingPage() {
           name="image"
           accept="image/*"
           onChange={handleChange}
-          className="border p-3 w-full rounded"
+          className="border p-3 w-full rounded bg-white dark:bg-gray-700 dark:border-gray-600 text-black dark:text-white"
           required
         />
 
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded font-semibold"
+          className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded font-semibold transition-colors duration-200 dark:bg-blue-700 dark:hover:bg-blue-800"
         >
           Post Listing
         </button>
