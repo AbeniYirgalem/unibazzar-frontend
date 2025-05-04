@@ -79,14 +79,14 @@ function PasswordResetPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white px-4">
+    <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900 px-4">
       <div className="w-full max-w-md my-auto">
-        <div className="bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-lg p-8 rounded-2xl shadow-xl border border-gray-100 text-gray-800">
+        <div className="bg-gradient-to-br from-white/80 to-white/60 dark:from-gray-800/80 dark:to-gray-900/60 backdrop-blur-lg p-8 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 text-gray-800 dark:text-white">
           <div className="text-center mb-6">
-            <h1 className="text-2xl font-bold mb-2 font-poppins">
+            <h1 className="text-2xl font-bold mb-2 font-poppins dark:text-white">
               {isConfirmMode ? "Set New Password" : "Reset Your Password"}
             </h1>
-            <p className="text-gray-600 text-sm font-inter">
+            <p className="text-gray-600 dark:text-gray-300 text-sm font-inter">
               {isConfirmMode
                 ? "Please enter your new password below"
                 : "Enter your email address and we'll send you a link to reset your password"}
@@ -94,13 +94,13 @@ function PasswordResetPage() {
           </div>
 
           {error && (
-            <div className="bg-red-100 border border-red-200 text-red-700 p-3 rounded-lg mb-6">
+            <div className="bg-red-100 dark:bg-red-900/40 border border-red-200 dark:border-red-700 text-red-700 dark:text-red-300 p-3 rounded-lg mb-6">
               <p className="text-sm text-center">{error}</p>
             </div>
           )}
 
           {success && (
-            <div className="bg-green-100 border border-green-200 text-green-700 p-3 rounded-lg mb-6">
+            <div className="bg-green-100 dark:bg-green-900/40 border border-green-200 dark:border-green-700 text-green-700 dark:text-green-300 p-3 rounded-lg mb-6">
               <p className="text-sm text-center">{success}</p>
             </div>
           )}
@@ -109,19 +109,19 @@ function PasswordResetPage() {
             // Confirm/Reset Form
             <form onSubmit={handleConfirmReset}>
               <div className="mb-4">
-                <label className="block mb-2 text-sm font-medium text-gray-700">
+                <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200">
                   New Password
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                    <FaLock className="text-gray-500" />
+                    <FaLock className="text-gray-500 dark:text-gray-400" />
                   </div>
                   <input
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Enter new password"
-                    className="w-full px-4 py-3 pl-10 rounded-md bg-white border border-gray-300 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 placeholder-gray-400 text-gray-800"
+                    className="w-full px-4 py-3 pl-10 rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:focus:border-blue-900 placeholder-gray-400 dark:placeholder-gray-400 text-gray-800 dark:text-white"
                     required
                     minLength={8}
                   />
@@ -129,19 +129,19 @@ function PasswordResetPage() {
               </div>
 
               <div className="mb-6">
-                <label className="block mb-2 text-sm font-medium text-gray-700">
+                <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200">
                   Confirm New Password
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                    <FaLock className="text-gray-500" />
+                    <FaLock className="text-gray-500 dark:text-gray-400" />
                   </div>
                   <input
                     type="password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="Confirm new password"
-                    className="w-full px-4 py-3 pl-10 rounded-md bg-white border border-gray-300 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 placeholder-gray-400 text-gray-800"
+                    className="w-full px-4 py-3 pl-10 rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:focus:border-blue-900 placeholder-gray-400 dark:placeholder-gray-400 text-gray-800 dark:text-white"
                     required
                   />
                 </div>
@@ -185,19 +185,19 @@ function PasswordResetPage() {
             // Request Form
             <form onSubmit={handleRequestReset}>
               <div className="mb-6">
-                <label className="block mb-2 text-sm font-medium text-gray-700">
+                <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200">
                   Email Address
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                    <FaEnvelope className="text-gray-500" />
+                    <FaEnvelope className="text-gray-500 dark:text-gray-400" />
                   </div>
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email"
-                    className="w-full px-4 py-3 pl-10 rounded-md bg-white border border-gray-300 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 placeholder-gray-400 text-gray-800"
+                    className="w-full px-4 py-3 pl-10 rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:focus:border-blue-900 placeholder-gray-400 dark:placeholder-gray-400 text-gray-800 dark:text-white"
                     required
                   />
                 </div>
@@ -242,7 +242,7 @@ function PasswordResetPage() {
           <div className="text-center mt-4">
             <a
               href="/login"
-              className="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
+              className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
             >
               Back to Login
             </a>
