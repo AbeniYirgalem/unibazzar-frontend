@@ -1,150 +1,383 @@
-import { useState } from "react";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { registerUser } from "../redux/slices/authSlice";
-import { useNavigate } from "react-router-dom";
+import {
+  registerUser,
+  clearError,
+  clearRegistrationSuccess,
+} from "../redux/slices/authSlice";
+import {
+  FaUser,
+  FaEnvelope,
+  FaLock,
+  // FaEye,
+  // FaEyeSlash,
+} from "react-icons/fa";
+import Alert from "../components/ui/Alert";
+import Spinner from "../components/ui/Spinner";
+import store from "../redux/store";
 
 function SignUpPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error } = useSelector((state) => state.auth);
+  const { loading, error, isAuthenticated, user, registrationSuccess } =
+    useSelector((state) => state.auth);
 
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [role, setRole] = useState("student");
+  const [formData, setFormData] = useState({
+    full_name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    role: "student",
+  });
+  const [errorMessage, setErrorMessage] = useState("");
+  const [verificationMessage, setVerificationMessage] = useState("");
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  // Clear errors when component mounts or unmounts
+  useEffect(() => {
+    dispatch(clearError());
+    dispatch(clearRegistrationSuccess());
+    return () => {
+      dispatch(clearError());
+      dispatch(clearRegistrationSuccess());
+    };
+  }, [dispatch]);
+
+  // Redirect if user is already authenticated
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      const redirectPath =
+        user.role === "merchant" ? "/merchant-dashboard" : "/listings";
+      navigate(redirectPath);
+    }
+  }, [isAuthenticated, user, navigate]);
+
+  // Redirect to login if registration is successful
+  useEffect(() => {
+    if (registrationSuccess) {
+      console.log(
+        "Registration successful, preparing to show verification message"
+      );
+
+      // Save the user data to localStorage for later use
+      const userData = {
+        email: formData.email,
+        role: formData.role,
+      };
+
+      // If registration response includes user_id, store it
+      const authState = store.getState().auth;
+      if (authState.registrationData && authState.registrationData.user_id) {
+        userData.id = authState.registrationData.user_id;
+        console.log(`Adding user ID ${userData.id} from registration response`);
+      }
+
+      console.log("Saving user data to localStorage:", userData);
+      localStorage.setItem("newUserData", JSON.stringify(userData));
+
+      // Show verification message instead of auto-redirecting
+      setVerificationMessage(
+        authState.registrationData?.email_verification ||
+          "Please check your email to verify your account before logging in."
+      );
+
+      // After a delay, redirect to login page
+      setTimeout(() => {
+        console.log("Redirecting to login page");
+        navigate("/login");
+      }, 8000); // 8 second delay to allow user to read the longer message
+    }
+  }, [registrationSuccess, navigate, formData.email, formData.role]);
+
+  // Handle API errors
+  useEffect(() => {
+    if (error) {
+      setErrorMessage(error);
+    }
+  }, [error]);
+
+  // Access field errors for individual field validation feedback
+  const { fieldErrors } = useSelector((state) => state.auth);
+
+  // Helper to get field-specific error messages
+  const getFieldError = (fieldName) => {
+    if (!fieldErrors || !fieldErrors[fieldName]) return null;
+
+    const errors = fieldErrors[fieldName];
+    if (Array.isArray(errors)) {
+      return errors.join(", ");
+    }
+    return errors;
+  };
+
+  const emailError = getFieldError("email");
+  const passwordError = getFieldError("password");
+  const fullNameError = getFieldError("full_name");
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const validateForm = () => {
+    if (formData.password !== formData.confirmPassword) {
+      setErrorMessage("Passwords do not match");
+      return false;
+    }
+
+    return true;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (password !== confirmPassword) return alert("Passwords do not match");
+    setErrorMessage("");
 
-    const resultAction = await dispatch(
-      registerUser({ fullName, email, password, role })
-    );
+    if (!validateForm()) {
+      return;
+    }
 
-    if (registerUser.fulfilled.match(resultAction)) {
-      const redirectPath = role === "merchant" ? "/dashboard" : "/listings";
-      navigate(redirectPath);
+    try {
+      // Create API-ready data with confirm_password instead of confirmPassword
+      const apiData = {
+        full_name: formData.full_name,
+        email: formData.email,
+        password: formData.password,
+        confirm_password: formData.confirmPassword,
+        role: formData.role,
+      };
+
+      await dispatch(registerUser(apiData));
+    } catch (err) {
+      console.error("Registration error:", err);
     }
   };
 
+  const handleCloseError = () => {
+    setErrorMessage("");
+    dispatch(clearError());
+  };
+
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-gray-100">
-      <div className="hidden md:flex w-1/2 bg-gradient-to-br from-blue-700 to-blue-500 items-center justify-center rounded-tr-[256px] rounded-br-[256px] px-10 text-white text-center">
-        <div>
-          <h2 className="text-4xl font-extrabold mb-3">Join UniBazzar</h2>
-          <p className="text-base max-w-md mx-auto leading-relaxed">
-            Buy, sell, and support fellow students with Ethiopia's most trusted campus marketplace.
-          </p>
-        </div>
-      </div>
-
-      <div className="w-full md:w-1/2 flex items-center justify-center p-4">
-        <form onSubmit={handleSubmit} className="w-full max-w-sm bg-white rounded-2xl shadow-xl p-6 md:p-8">
-          <div className="bg-yellow-400 p-3 rounded-full mb-4 shadow-md mx-auto w-fit">
-            <span className="text-blue-900 font-bold text-base">UB</span>
+    <div className="min-h-screen flex items-center justify-center bg-white px-4">
+      <div className="w-full max-w-md my-auto">
+        <div className="bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-lg p-8 rounded-2xl shadow-xl border border-gray-100 text-gray-800">
+          <div className="px-6 pt-8 pb-6 text-center">
+            <h1 className="text-3xl font-bold text-gray-800 font-poppins">
+              Join UniBazzar
+            </h1>
+            <p className="mt-2 text-gray-600 font-inter">Create your account</p>
           </div>
 
-          <h1 className="text-2xl font-bold mb-1 text-center text-blue-900">Create Account</h1>
-          <p className="text-sm text-gray-600 mb-4 text-center">Start using your university email</p>
+          {errorMessage && (
+            <div className="px-6 pb-4">
+              <Alert
+                type="error"
+                message={errorMessage}
+                onClose={handleCloseError}
+              />
+            </div>
+          )}
 
-          {error && <p className="text-red-500 text-sm mb-4 text-center">{error}</p>}
+          {verificationMessage && (
+            <div className="px-6 pb-4">
+              <Alert
+                type="success"
+                message={verificationMessage}
+                autoClose={false}
+              />
+            </div>
+          )}
 
-          <div className="mb-3">
-            <label className="block text-sm text-gray-700 mb-1">Full Name</label>
-            <input
-              type="text"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              placeholder="e.g., Samuel Dawit"
-              className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 focus:outline-none focus:border-blue-600"
-              required
-            />
-          </div>
+          {registrationSuccess && !verificationMessage && (
+            <div className="px-6 pb-4">
+              <Alert
+                type="success"
+                message={registrationSuccess}
+                autoClose={true}
+              />
+            </div>
+          )}
 
-          <div className="mb-3">
-            <label className="block text-sm text-gray-700 mb-1">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="University email"
-              className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 focus:outline-none focus:border-blue-600"
-              required
-            />
-          </div>
-
-          {/* Role selection */}
-          <div className="mb-3">
-            <label className="block text-sm text-gray-700 mb-1">Register As</label>
-            <select
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 focus:outline-none focus:border-blue-600"
-              required
-            >
-              <option value="student">Student</option>
-              <option value="merchant">Merchant</option>
-            </select>
-          </div>
-
-          <div className="mb-3 relative">
-            <label className="block text-sm text-gray-700 mb-1">Password</label>
-            <input
-              type={showPassword ? "text" : "password"}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Strong password"
-              className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 focus:outline-none focus:border-blue-600"
-              required
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute inset-y-0 right-3 flex items-center text-gray-500"
-            >
-              {showPassword ? <FaEyeSlash className="w-4 h-4 mt-7" /> : <FaEye className="w-4 h-4 mt-7" />}
-            </button>
-          </div>
-
-          <div className="mb-4 relative">
-            <label className="block text-sm text-gray-700 mb-1">Confirm Password</label>
-            <input
-              type={showConfirmPassword ? "text" : "password"}
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Re-enter password"
-              className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 focus:outline-none focus:border-blue-600"
-              required
-            />
-            <button
-              type="button"
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute inset-y-0 right-3 flex items-center text-gray-500"
-            >
-              {showConfirmPassword ? <FaEyeSlash className="w-4 h-4 mt-7" /> : <FaEye className="w-4 h-4 mt-7" />}
-            </button>
-          </div>
-
-          <button
-            type="submit"
-            className="bg-blue-600 hover:bg-blue-700 text-white w-full py-2.5 rounded-md text-sm font-semibold mb-3"
-            disabled={loading}
+          <form
+            className="px-6 pt-2 pb-8 space-y-5 font-inter"
+            onSubmit={handleSubmit}
           >
-            {loading ? "Signing up..." : "Sign Up"}
-          </button>
+            <div>
+              <label
+                htmlFor="full_name"
+                className="block mb-1 text-sm font-medium text-gray-700"
+              >
+                Full Name
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <FaUser className="text-gray-500" />
+                </div>
+                <input
+                  id="full_name"
+                  name="full_name"
+                  type="text"
+                  autoComplete="name"
+                  required
+                  className={`w-full px-4 py-2 pl-10 rounded-md bg-white border ${
+                    fullNameError ? "border-red-500" : "border-gray-300"
+                  } focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 placeholder-gray-400 text-gray-800`}
+                  placeholder="Enter your full name"
+                  value={formData.full_name}
+                  onChange={handleChange}
+                />
+              </div>
+              {fullNameError && (
+                <p className="mt-1 text-sm text-red-600">{fullNameError}</p>
+              )}
+            </div>
 
-          <p className="text-xs text-gray-600 text-center">
-            Already have an account?{" "}
-            <a href="/login" className="text-blue-600 font-medium hover:underline">
-              Log in
-            </a>
-          </p>
-        </form>
+            <div>
+              <label
+                htmlFor="email"
+                className="block mb-1 text-sm font-medium text-gray-700"
+              >
+                Email Address
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <FaEnvelope className="text-gray-500" />
+                </div>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  className={`w-full px-4 py-2 pl-10 rounded-md bg-white border ${
+                    emailError ? "border-red-500" : "border-gray-300"
+                  } focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 placeholder-gray-400 text-gray-800`}
+                  placeholder="Enter your email"
+                  value={formData.email}
+                  onChange={handleChange}
+                />
+              </div>
+              {emailError && (
+                <p className="mt-1 text-sm text-red-600">{emailError}</p>
+              )}
+            </div>
+
+            <div>
+              <label
+                htmlFor="password"
+                className="block mb-1 text-sm font-medium text-gray-700"
+              >
+                Password
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <FaLock className="text-gray-500" />
+                </div>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  autoComplete="new-password"
+                  required
+                  className={`w-full px-4 py-2 pl-10 rounded-md bg-white border ${
+                    passwordError ? "border-red-500" : "border-gray-300"
+                  } focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 placeholder-gray-400 text-gray-800`}
+                  placeholder="Create a password"
+                  value={formData.password}
+                  onChange={handleChange}
+                />
+              </div>
+              {passwordError && (
+                <p className="mt-1 text-sm text-red-600">{passwordError}</p>
+              )}
+            </div>
+
+            <div>
+              <label
+                htmlFor="confirmPassword"
+                className="block mb-1 text-sm font-medium text-gray-700"
+              >
+                Confirm Password
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <FaLock className="text-gray-500" />
+                </div>
+                <input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type="password"
+                  required
+                  className="w-full px-4 py-3 pl-10 rounded-md bg-white border border-gray-300 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 placeholder-gray-400 text-gray-800"
+                  placeholder="Confirm your password"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block mb-1 text-sm font-medium text-gray-700">
+                Account Type
+              </label>
+              <div className="grid grid-cols-2 gap-4">
+                <label
+                  className={`flex items-center justify-center p-3 border rounded-md cursor-pointer transition-colors ${
+                    formData.role === "student"
+                      ? "bg-blue-50 border-blue-400 text-blue-700"
+                      : "bg-white border-gray-300 text-gray-600 hover:bg-gray-50"
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="role"
+                    value="student"
+                    className="sr-only"
+                    checked={formData.role === "student"}
+                    onChange={handleChange}
+                  />
+                  <span>Student</span>
+                </label>
+                <label
+                  className={`flex items-center justify-center p-3 border rounded-md cursor-pointer transition-colors ${
+                    formData.role === "merchant"
+                      ? "bg-blue-50 border-blue-400 text-blue-700"
+                      : "bg-white border-gray-300 text-gray-600 hover:bg-gray-50"
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="role"
+                    value="merchant"
+                    className="sr-only"
+                    checked={formData.role === "merchant"}
+                    onChange={handleChange}
+                  />
+                  <span>Merchant</span>
+                </label>
+              </div>
+            </div>
+
+            <div>
+              <button
+                type="submit"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-md font-semibold flex justify-center items-center transition duration-300 shadow-md"
+                disabled={loading}
+              >
+                {loading ? <Spinner size="sm" /> : "Create Account"}
+              </button>
+            </div>
+
+            <div className="text-center">
+              <Link
+                to="/login"
+                className="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
+              >
+                Already have an account? Sign in
+              </Link>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

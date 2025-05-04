@@ -1,6 +1,10 @@
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { Bars3Icon, XMarkIcon, ShoppingCartIcon } from "@heroicons/react/24/outline";
+import {
+  Bars3Icon,
+  XMarkIcon,
+  ShoppingCartIcon,
+} from "@heroicons/react/24/outline";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../redux/slices/authSlice";
@@ -15,8 +19,22 @@ export default function Navbar() {
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   const handleLogout = () => {
-    dispatch(logoutUser());
-    navigate("/login");
+    dispatch(logoutUser())
+      .then(() => {
+        localStorage.removeItem("authTokens");
+        localStorage.removeItem("newUserData");
+        sessionStorage.clear();
+
+        console.log("Logout successful, redirecting to login page");
+        navigate("/login", { replace: true });
+      })
+      .catch((error) => {
+        console.error("Error during logout:", error);
+        localStorage.removeItem("authTokens");
+        localStorage.removeItem("newUserData");
+        sessionStorage.clear();
+        navigate("/login", { replace: true });
+      });
   };
 
   const commonLinks = [
