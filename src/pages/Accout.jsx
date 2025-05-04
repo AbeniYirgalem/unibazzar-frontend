@@ -38,7 +38,9 @@ function Account() {
     <div className="bg-gray-100 min-h-screen mt-20 dark:bg-gray-900">
       {/* Header */}
       <div className="bg-white shadow p-4 flex justify-between items-center dark:bg-gray-800 dark:text-white">
-        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">My Account</h1>
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+          My Account
+        </h1>
         <div className="flex items-center space-x-4">
           <div className="w-10 h-10 rounded-full bg-gray-300 overflow-hidden">
             <img
@@ -136,13 +138,15 @@ function Account() {
           </div>
 
           <div className="bg-white shadow rounded p-4 space-y-3 dark:bg-gray-800 dark:text-white">
-            <h3 className="font-semibold text-gray-800 dark:text-white">Profile Settings</h3>
+            <h3 className="font-semibold text-gray-800 dark:text-white">
+              Profile Settings
+            </h3>
             <button className="w-full bg-gray-100 py-2 rounded text-left px-3 dark:bg-gray-700 dark:text-white">
               Add bio
             </button>
             <button className="w-full bg-gray-100 py-2 rounded text-left px-3 dark:bg-gray-700 dark:text-white">
               Edit profile
-            </Link>
+            </button>
             <button className="w-full bg-gray-100 py-2 rounded text-left px-3 hover:bg-gray-200">
               Change password
             </button>
@@ -152,7 +156,9 @@ function Account() {
           </div>
 
           <div className="bg-white shadow rounded p-4 dark:bg-gray-800 dark:text-white">
-            <h3 className="font-semibold text-gray-800 mb-4 dark:text-white">Gallery</h3>
+            <h3 className="font-semibold text-gray-800 mb-4 dark:text-white">
+              Gallery
+            </h3>
             <div className="grid grid-cols-2 gap-2">
               <div className="w-full h-24 bg-gray-200 rounded dark:bg-gray-700"></div>
               <div className="w-full h-24 bg-gray-200 rounded dark:bg-gray-700"></div>
@@ -181,24 +187,21 @@ function Account() {
             </div>
           </div>
 
-                <div className="p-4 bg-gray-50 rounded">
-                  <h4 className="font-medium text-gray-700 mb-2">
-                    Email Verification
-                  </h4>
-                  <p className="text-sm">
-                    {user.is_verified ? (
-                      <span className="text-green-600">
-                        Your email has been verified.
-                      </span>
-                    ) : (
-                      <span className="text-yellow-600">
-                        Please verify your email to access all features.
-                      </span>
-                    )}
-                  </p>
-                </div>
-              </div>
-            )}
+          <div className="p-4 bg-gray-50 rounded">
+            <h4 className="font-medium text-gray-700 mb-2">
+              Email Verification
+            </h4>
+            <p className="text-sm">
+              {user && user.is_verified ? (
+                <span className="text-green-600">
+                  Your email has been verified.
+                </span>
+              ) : (
+                <span className="text-yellow-600">
+                  Please verify your email to access all features.
+                </span>
+              )}
+            </p>
           </div>
 
           <div className="bg-white shadow rounded p-4">

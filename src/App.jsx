@@ -24,7 +24,6 @@ import ProfilePage from "./pages/ProfilePage";
 import PasswordResetPage from "./pages/PasswordResetPage";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
 import { fetchUserProfile, verifyToken } from "./redux/slices/authSlice";
 
 // Import profile form components
@@ -94,31 +93,30 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-white text-gray-900 dark:bg-gray-900 dark:text-white">
-      <>
-        <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
+      <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
 
-        {/* Theme Toggle Button */}
-        <div className="text-right p-4">
-          <button
-            onClick={toggleTheme}
-            className="text-2xl text-gray-800 dark:text-white focus:outline-none"
-            aria-label="Toggle Theme"
-          >
-            {isDarkMode ? <IoSunny /> : <IoMoon />}
-          </button>
-        </div>
+      {/* Theme Toggle Button */}
+      <div className="text-right p-4">
+        <button
+          onClick={toggleTheme}
+          className="text-2xl text-gray-800 dark:text-white focus:outline-none"
+          aria-label="Toggle Theme"
+        >
+          {isDarkMode ? <IoSunny /> : <IoMoon />}
+        </button>
+      </div>
 
-        {shouldShowNavbar && <Navbar />}
+      {shouldShowNavbar && <Navbar />}
       <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignupPage />} />
-            <Route path="/listings" element={<MarketplacePage />} />
-            <Route path="/listing/:id" element={<ListingDetailPage />} />
-            <Route path="/similar/:id" element={<SimilarItemsPage />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<ContactUs />} />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/listings" element={<MarketplacePage />} />
+          <Route path="/listing/:id" element={<ListingDetailPage />} />
+          <Route path="/similar/:id" element={<SimilarItemsPage />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<ContactUs />} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/unauthorized" element={<UnauthorizedPage />} />
 
@@ -130,8 +128,8 @@ function AppContent() {
             element={<PasswordResetPage />}
           />
 
-            {/* Protected Routes */}
-            <Route
+          {/* Protected Routes */}
+          <Route
             path="/profile"
             element={
               <PrivateRoute>
@@ -140,37 +138,37 @@ function AppContent() {
             }
           />
           <Route
-              path="/create"
-              element={
-                <PrivateRoute>
-                  <CreateListingPage />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/account"
-              element={
-                <PrivateRoute>
-                  <Account />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/cart"
-              element={
-                <PrivateRoute>
-                  <CartPage />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/dashboard"
-              element={
-                <PrivateRoute>
-                  <Dashboard />
-                </PrivateRoute>
-              }
-            />
+            path="/create"
+            element={
+              <PrivateRoute>
+                <CreateListingPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/account"
+            element={
+              <PrivateRoute>
+                <Account />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/cart"
+            element={
+              <PrivateRoute>
+                <CartPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
           <Route
             path="/tutordashboard"
             element={
@@ -187,7 +185,7 @@ function AppContent() {
               </PrivateRoute>
             }
           />
-            <Route
+          <Route
             path="/merchant-dashboard"
             element={
               <PrivateRoute requiredRoles={["merchant"]}>
@@ -268,9 +266,9 @@ function AppContent() {
             }
           />
         </Routes>
-        </main>
+      </main>
       {shouldShowNavbar && <Footer />}
-    </>
+    </div>
   );
 }
 
@@ -279,8 +277,7 @@ function App() {
     <div className="flex flex-col min-h-screen">
       <BrowserRouter>
         <AppContent />
-        </BrowserRouter>
-    </div>
+      </BrowserRouter>
     </div>
   );
 }
