@@ -35,10 +35,10 @@ function Account() {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen mt-20">
+    <div className="bg-gray-100 min-h-screen mt-20 dark:bg-gray-900">
       {/* Header */}
-      <div className="bg-white shadow p-4 flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-800">My Account</h1>
+      <div className="bg-white shadow p-4 flex justify-between items-center dark:bg-gray-800 dark:text-white">
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">My Account</h1>
         <div className="flex items-center space-x-4">
           <div className="w-10 h-10 rounded-full bg-gray-300 overflow-hidden">
             <img
@@ -47,7 +47,7 @@ function Account() {
               className="w-full h-full object-cover"
             />
           </div>
-          <span className="text-gray-800">
+          <span className="text-gray-800 dark:text-gray-100">
             {user ? capitalize(user.role) : "Loading..."}
           </span>
         </div>
@@ -57,7 +57,7 @@ function Account() {
       <div className="max-w-6xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Sidebar - User Information */}
         <div className="lg:col-span-1 space-y-6">
-          <div className="bg-white shadow rounded p-4">
+          <div className="bg-white shadow rounded p-4 dark:bg-gray-800 dark:text-white">
             <div className="flex items-center space-x-4 mb-4">
               <div className="w-20 h-20 rounded-full bg-gray-300 overflow-hidden flex items-center justify-center">
                 {user?.full_name ? (
@@ -76,10 +76,10 @@ function Account() {
                 )}
               </div>
               <div>
-                <h2 className="text-xl font-bold text-gray-800">
+                <h2 className="text-xl font-bold text-gray-800 dark:text-white">
                   {loading ? "Loading..." : user?.full_name || "User"}
                 </h2>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   {user?.role && capitalize(user.role)}
                 </p>
               </div>
@@ -117,76 +117,69 @@ function Account() {
             </div>
 
             <div className="mt-4 flex flex-wrap gap-2">
-              <button className="bg-blue-500 text-white text-sm px-3 py-1 rounded">
+              <button className="bg-blue-500 text-white text-sm px-3 py-1 rounded dark:bg-blue-700 dark:hover:bg-blue-600">
                 Profile
               </button>
-              <button className="bg-gray-200 text-sm px-3 py-1 rounded">
+              <button className="bg-gray-200 text-sm px-3 py-1 rounded dark:bg-gray-700 dark:text-white">
                 Activity
               </button>
-              <button className="bg-gray-200 text-sm px-3 py-1 rounded">
-                Settings
+              <button className="bg-gray-200 text-sm px-3 py-1 rounded dark:bg-gray-700 dark:text-white">
+                Gallery
+              </button>
+              <button className="bg-gray-200 text-sm px-3 py-1 rounded dark:bg-gray-700 dark:text-white">
+                Videos
+              </button>
+              <button className="bg-gray-200 text-sm px-3 py-1 rounded dark:bg-gray-700 dark:text-white">
+                Connections
               </button>
             </div>
           </div>
 
-          <div className="bg-white shadow rounded p-4 space-y-3">
-            <h3 className="font-semibold text-gray-800">Profile Settings</h3>
-            <Link
-              to="/profile"
-              className="block w-full bg-gray-100 py-2 rounded text-left px-3 hover:bg-gray-200"
-            >
+          <div className="bg-white shadow rounded p-4 space-y-3 dark:bg-gray-800 dark:text-white">
+            <h3 className="font-semibold text-gray-800 dark:text-white">Profile Settings</h3>
+            <button className="w-full bg-gray-100 py-2 rounded text-left px-3 dark:bg-gray-700 dark:text-white">
+              Add bio
+            </button>
+            <button className="w-full bg-gray-100 py-2 rounded text-left px-3 dark:bg-gray-700 dark:text-white">
               Edit profile
             </Link>
             <button className="w-full bg-gray-100 py-2 rounded text-left px-3 hover:bg-gray-200">
               Change password
             </button>
-            <button className="w-full bg-gray-100 py-2 rounded text-left px-3 hover:bg-gray-200">
+            <button className="w-full bg-gray-100 py-2 rounded text-left px-3 dark:bg-gray-700 dark:text-white hover:bg-gray-200">
               Privacy settings
             </button>
+          </div>
+
+          <div className="bg-white shadow rounded p-4 dark:bg-gray-800 dark:text-white">
+            <h3 className="font-semibold text-gray-800 mb-4 dark:text-white">Gallery</h3>
+            <div className="grid grid-cols-2 gap-2">
+              <div className="w-full h-24 bg-gray-200 rounded dark:bg-gray-700"></div>
+              <div className="w-full h-24 bg-gray-200 rounded dark:bg-gray-700"></div>
+              <div className="w-full h-24 bg-gray-200 rounded dark:bg-gray-700"></div>
+              <div className="w-full h-24 bg-gray-200 rounded dark:bg-gray-700"></div>
+            </div>
           </div>
         </div>
 
         {/* Center Feed */}
         <div className="lg:col-span-2 space-y-6">
-          <div className="bg-white shadow rounded p-4">
-            <h3 className="font-semibold text-lg mb-4">Account Overview</h3>
-
-            {loading ? (
-              <div className="flex justify-center py-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+          <div className="bg-white shadow rounded p-4 dark:bg-gray-800 dark:text-white">
+            <input
+              type="text"
+              placeholder="What's happening on campus?"
+              className="w-full border rounded px-4 py-2 text-sm mb-2 dark:bg-gray-700 dark:text-white"
+            />
+            <div className="flex justify-between items-center text-gray-500 text-sm dark:text-gray-400">
+              <div className="flex items-center space-x-2">
+                <FaCamera />
+                <span>Photo</span>
               </div>
-            ) : !user ? (
-              <div className="bg-yellow-100 text-yellow-800 p-4 rounded">
-                Could not load user data. Please try refreshing the page.
-              </div>
-            ) : (
-              <div className="space-y-6">
-                <div className="p-4 bg-gray-50 rounded">
-                  <h4 className="font-medium text-gray-700 mb-2">
-                    Account Status
-                  </h4>
-                  <p className="text-sm">
-                    Your account is{" "}
-                    <span className="text-green-600 font-medium">active</span>.
-                  </p>
-                </div>
-
-                <div className="p-4 bg-gray-50 rounded">
-                  <h4 className="font-medium text-gray-700 mb-2">
-                    Account Type
-                  </h4>
-                  <p className="text-sm flex items-center">
-                    <span className="mr-2 bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">
-                      {capitalize(user.role || "User")}
-                    </span>
-                    {user.role === "student" &&
-                      "Access to student marketplace features"}
-                    {user.role === "merchant" &&
-                      "Access to merchant selling features"}
-                    {user.role === "tutor" && "Access to tutoring features"}
-                    {user.role === "campus_admin" && "Administrator privileges"}
-                  </p>
-                </div>
+              <button className="bg-blue-500 text-white px-4 py-1 rounded text-sm dark:bg-blue-700">
+                Share
+              </button>
+            </div>
+          </div>
 
                 <div className="p-4 bg-gray-50 rounded">
                   <h4 className="font-medium text-gray-700 mb-2">
@@ -218,8 +211,8 @@ function Account() {
       </div>
 
       {/* Newsletter */}
-      <div className="bg-white shadow mt-6 p-4 flex flex-col md:flex-row justify-between items-center max-w-6xl mx-auto rounded">
-        <p className="text-sm text-gray-600 mb-2 md:mb-0">
+      <div className="bg-white shadow mt-6 p-4 flex flex-col md:flex-row justify-between items-center max-w-6xl mx-auto rounded dark:bg-gray-800 dark:text-white">
+        <p className="text-sm text-gray-600 mb-2 md:mb-0 dark:text-gray-400">
           Stay informed! Subscribe to the campus newsletter for exclusive
           offers!
         </p>
@@ -227,9 +220,9 @@ function Account() {
           <input
             type="email"
             placeholder="Enter your university email"
-            className="border px-3 py-1 rounded text-sm"
+            className="border px-3 py-1 rounded text-sm dark:bg-gray-700 dark:text-white"
           />
-          <button className="bg-blue-500 text-white px-4 py-1 rounded text-sm">
+          <button className="bg-blue-500 text-white px-4 py-1 rounded text-sm dark:bg-blue-700">
             Subscribe
           </button>
         </div>
