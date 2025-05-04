@@ -366,14 +366,14 @@ function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white px-4">
+    <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900 px-4">
       <div className="w-full max-w-md my-auto">
-        <div className="bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-lg p-8 rounded-2xl shadow-xl border border-gray-100 text-gray-800">
+        <div className="bg-gradient-to-br from-white/80 to-white/60 dark:from-gray-800/80 dark:to-gray-900/60 backdrop-blur-lg p-8 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 text-gray-800 dark:text-white">
           <div className="px-6 pt-8 pb-6 text-center">
-            <h1 className="text-3xl font-bold text-gray-800 font-poppins">
+            <h1 className="text-3xl font-bold text-gray-800 dark:text-white font-poppins">
               Welcome to UniBazzar
             </h1>
-            <p className="mt-2 text-gray-600 font-inter">
+            <p className="mt-2 text-gray-600 dark:text-gray-300 font-inter">
               Sign in to your account
             </p>
           </div>
@@ -408,7 +408,7 @@ function LoginPage() {
             <div>
               <label
                 htmlFor="email"
-                className="block mb-2 text-sm font-medium text-gray-700"
+                className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200"
               >
                 Email address
               </label>
@@ -422,7 +422,7 @@ function LoginPage() {
                   type="email"
                   autoComplete="email"
                   required
-                  className="w-full px-4 py-3 pl-10 rounded-md bg-white border border-gray-300 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 placeholder-gray-400 text-gray-800"
+                  className="w-full px-4 py-3 pl-10 rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900 placeholder-gray-400 text-gray-800 dark:text-white"
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -433,7 +433,7 @@ function LoginPage() {
             <div>
               <label
                 htmlFor="password"
-                className="block mb-2 text-sm font-medium text-gray-700"
+                className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200"
               >
                 Password
               </label>
@@ -447,7 +447,7 @@ function LoginPage() {
                   type={showPassword ? "text" : "password"}
                   autoComplete="current-password"
                   required
-                  className="w-full px-4 py-3 pl-10 pr-10 rounded-md bg-white border border-gray-300 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 placeholder-gray-400 text-gray-800"
+                  className="w-full px-4 py-3 pl-10 pr-10 rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900 placeholder-gray-400 text-gray-800 dark:text-white"
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -474,7 +474,7 @@ function LoginPage() {
                 />
                 <label
                   htmlFor="remember-me"
-                  className="ml-2 block text-sm text-gray-600"
+                  className="ml-2 block text-sm text-gray-600 dark:text-gray-300"
                 >
                   Remember me
                 </label>
@@ -507,7 +507,7 @@ function LoginPage() {
             <div className="text-center">
               <Link
                 to="/signup"
-                className="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
+                className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
               >
                 Don't have an account? Sign up
               </Link>

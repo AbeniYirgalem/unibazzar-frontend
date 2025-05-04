@@ -154,6 +154,15 @@ const StudentProfileForm = ({ mode = "create" }) => {
     }
   };
 
+  // Add this function to reset the form
+  const handleCancel = () => {
+    setFormData({ university_id: "", student_id: "", offer_tutoring: false });
+    setSelectedUniversityName("");
+    setSearchTerm("");
+    setError(null);
+    setSuccessMessage("");
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
@@ -247,6 +256,21 @@ const StudentProfileForm = ({ mode = "create" }) => {
         }
       }
     } catch (error) {
+      // Allow user to pass if tutor profile already exists
+      if (
+        error.response &&
+        typeof error.response.data === "object" &&
+        Object.values(error.response.data).some(
+          (msg) =>
+            typeof msg === "string" &&
+            msg
+              .toLowerCase()
+              .includes("tutor profile with this user already exists")
+        )
+      ) {
+        navigate("/listings", { replace: true });
+        return;
+      }
       // Log detailed error information
       console.log("Submit error:", error);
 
@@ -277,14 +301,14 @@ const StudentProfileForm = ({ mode = "create" }) => {
 
   return (
     <Layout>
-      <div className="p-8">
+      <div className="p-8 bg-white dark:bg-gray-900 rounded-xl shadow-xl">
         <div className="mb-6 text-center">
-          <h1 className="text-2xl font-bold text-gray-800 font-poppins">
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-white font-poppins">
             {mode === "create"
               ? "Complete Your Student Profile"
               : "Edit Your Student Profile"}
           </h1>
-          <p className="mt-2 text-gray-600 font-inter">
+          <p className="mt-2 text-gray-600 dark:text-gray-300 font-inter">
             {mode === "create"
               ? "Please provide your university information to complete your profile."
               : "Update your university information below."}
@@ -320,7 +344,7 @@ const StudentProfileForm = ({ mode = "create" }) => {
           <div ref={dropdownRef}>
             <label
               htmlFor="university_search"
-              className="block mb-2 text-sm font-medium text-gray-700"
+              className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200"
             >
               University
             </label>
@@ -332,7 +356,7 @@ const StudentProfileForm = ({ mode = "create" }) => {
                 type="text"
                 id="university_search"
                 placeholder="Search for your university"
-                className="w-full px-4 py-3 pl-10 rounded-md bg-white border border-gray-300 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 placeholder-gray-400 text-gray-800"
+                className="w-full px-4 py-3 pl-10 rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900 placeholder-gray-400 text-gray-800 dark:text-white"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 onFocus={() => setIsDropdownOpen(true)}
@@ -369,7 +393,7 @@ const StudentProfileForm = ({ mode = "create" }) => {
           <div>
             <label
               htmlFor="student_id"
-              className="block mb-2 text-sm font-medium text-gray-700"
+              className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200"
             >
               University Student ID
             </label>
@@ -381,7 +405,7 @@ const StudentProfileForm = ({ mode = "create" }) => {
                 id="student_id"
                 name="student_id"
                 type="text"
-                className="w-full px-4 py-3 pl-10 rounded-md bg-white border border-gray-300 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 placeholder-gray-400 text-gray-800"
+                className="w-full px-4 py-3 pl-10 rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900 placeholder-gray-400 text-gray-800 dark:text-white"
                 placeholder="Enter your student ID number"
                 value={formData.student_id}
                 onChange={handleChange}
@@ -404,12 +428,12 @@ const StudentProfileForm = ({ mode = "create" }) => {
             <div className="flex flex-col">
               <label
                 htmlFor="offer_tutoring"
-                className="text-sm font-medium text-gray-700 flex items-center"
+                className="text-sm font-medium text-gray-700 dark:text-gray-200 flex items-center"
               >
                 <FaChalkboardTeacher className="mr-2 text-blue-500" />I want to
                 offer tutoring services
               </label>
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-gray-500 dark:text-gray-300 mt-1">
                 Check this if you want to register as a tutor. This will update
                 your role from student to tutor, and you'll be guided to set up
                 your tutor profile next.
@@ -420,8 +444,8 @@ const StudentProfileForm = ({ mode = "create" }) => {
           <div className="flex justify-end space-x-4 pt-4">
             <button
               type="button"
-              className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors font-poppins"
-              onClick={() => navigate(-1)}
+              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-poppins"
+              onClick={handleCancel}
             >
               Cancel
             </button>

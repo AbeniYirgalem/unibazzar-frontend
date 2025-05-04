@@ -157,15 +157,44 @@ const TutorProfileForm = ({ mode = "create" }) => {
     try {
       if (mode === "create") {
         await createProfile(submitData);
-        navigate("/"); // Navigate to home page
+        navigate("/listings", { replace: true });
       } else if (mode === "edit" && user?.profile_id) {
         await updateProfile(user.profile_id, submitData);
-        navigate("/profile");
+        navigate("/profile", { replace: true });
       }
     } catch (error) {
+      // Allow user to pass if tutor profile already exists
+      if (
+        error.response &&
+        typeof error.response.data === "object" &&
+        Object.values(error.response.data).some(
+          (msg) =>
+            typeof msg === "string" &&
+            msg
+              .toLowerCase()
+              .includes("tutor profile with this user already exists")
+        )
+      ) {
+        navigate("/listings", { replace: true });
+        return;
+      }
       // Error is handled via the useEffect above
       console.log("Submit error:", error);
     }
+  };
+
+  // Add this function to reset the form
+  const handleCancel = () => {
+    setFormData({
+      department: "",
+      year: "",
+      teaching_levels: [],
+      subjects_scores: {},
+      edu_docs: null,
+    });
+    setSubjectInput("");
+    setScoreInput("");
+    setError(null);
   };
 
   if (isLoading) {
@@ -180,14 +209,14 @@ const TutorProfileForm = ({ mode = "create" }) => {
 
   return (
     <Layout>
-      <div className="p-8">
+      <div className="p-8 bg-white dark:bg-gray-900 rounded-xl shadow-xl">
         <div className="mb-6 text-center">
-          <h1 className="text-2xl font-bold text-gray-800 font-poppins">
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-white font-poppins">
             {mode === "create"
               ? "Complete Your Tutor Profile"
               : "Edit Your Tutor Profile"}
           </h1>
-          <p className="mt-2 text-gray-600 font-inter">
+          <p className="mt-2 text-gray-600 dark:text-gray-300 font-inter">
             {mode === "create"
               ? "Please provide your teaching information to complete your profile."
               : "Update your teaching information below."}
@@ -211,7 +240,7 @@ const TutorProfileForm = ({ mode = "create" }) => {
           <div>
             <label
               htmlFor="department"
-              className="block mb-2 text-sm font-medium text-gray-700"
+              className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200"
             >
               Department
             </label>
@@ -223,7 +252,7 @@ const TutorProfileForm = ({ mode = "create" }) => {
                 id="department"
                 name="department"
                 type="text"
-                className="w-full px-4 py-3 pl-10 rounded-md bg-white border border-gray-300 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 placeholder-gray-400 text-gray-800"
+                className="w-full px-4 py-3 pl-10 rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900 placeholder-gray-400 text-gray-800 dark:text-white"
                 placeholder="e.g. Computer Science, Mathematics"
                 value={formData.department}
                 onChange={handleChange}
@@ -235,7 +264,7 @@ const TutorProfileForm = ({ mode = "create" }) => {
           <div>
             <label
               htmlFor="year"
-              className="block mb-2 text-sm font-medium text-gray-700"
+              className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200"
             >
               Year
             </label>
@@ -246,7 +275,7 @@ const TutorProfileForm = ({ mode = "create" }) => {
               <select
                 id="year"
                 name="year"
-                className="w-full px-4 py-3 pl-10 rounded-md bg-white border border-gray-300 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 placeholder-gray-400 text-gray-800"
+                className="w-full px-4 py-3 pl-10 rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900 placeholder-gray-400 text-gray-800 dark:text-white"
                 value={formData.year}
                 onChange={handleChange}
                 required
@@ -262,7 +291,7 @@ const TutorProfileForm = ({ mode = "create" }) => {
           </div>
 
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-700 flex items-center">
+            <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200 flex items-center">
               <FaList className="mr-2 text-gray-500" />
               Teaching Levels
             </label>
@@ -279,7 +308,7 @@ const TutorProfileForm = ({ mode = "create" }) => {
                 />
                 <label
                   htmlFor="level_elementary"
-                  className="ml-2 block text-sm text-gray-700"
+                  className="ml-2 block text-sm text-gray-700 dark:text-gray-200"
                 >
                   Elementary
                 </label>
@@ -296,7 +325,7 @@ const TutorProfileForm = ({ mode = "create" }) => {
                 />
                 <label
                   htmlFor="level_middle_school"
-                  className="ml-2 block text-sm text-gray-700"
+                  className="ml-2 block text-sm text-gray-700 dark:text-gray-200"
                 >
                   Middle School
                 </label>
@@ -313,7 +342,7 @@ const TutorProfileForm = ({ mode = "create" }) => {
                 />
                 <label
                   htmlFor="level_high_school"
-                  className="ml-2 block text-sm text-gray-700"
+                  className="ml-2 block text-sm text-gray-700 dark:text-gray-200"
                 >
                   High School
                 </label>
@@ -330,7 +359,7 @@ const TutorProfileForm = ({ mode = "create" }) => {
                 />
                 <label
                   htmlFor="level_college"
-                  className="ml-2 block text-sm text-gray-700"
+                  className="ml-2 block text-sm text-gray-700 dark:text-gray-200"
                 >
                   College
                 </label>
@@ -339,7 +368,7 @@ const TutorProfileForm = ({ mode = "create" }) => {
           </div>
 
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-700">
+            <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200">
               Subjects and Scores
             </label>
             <div className="flex space-x-2 mb-3">
@@ -349,7 +378,7 @@ const TutorProfileForm = ({ mode = "create" }) => {
                   placeholder="Subject name"
                   value={subjectInput}
                   onChange={(e) => setSubjectInput(e.target.value)}
-                  className="w-full px-4 py-3 rounded-md bg-white border border-gray-300 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 placeholder-gray-400 text-gray-800"
+                  className="w-full px-4 py-3 rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900 placeholder-gray-400 text-gray-800 dark:text-white"
                 />
               </div>
               <div className="w-20">
@@ -358,13 +387,13 @@ const TutorProfileForm = ({ mode = "create" }) => {
                   placeholder="Score"
                   value={scoreInput}
                   onChange={(e) => setScoreInput(e.target.value)}
-                  className="w-full px-4 py-3 rounded-md bg-white border border-gray-300 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 placeholder-gray-400 text-gray-800"
+                  className="w-full px-4 py-3 rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900 placeholder-gray-400 text-gray-800 dark:text-white"
                 />
               </div>
               <button
                 type="button"
                 onClick={handleAddSubject}
-                className="bg-blue-600 hover:bg-blue-700 text-white p-2 w-10 h-10 rounded-md flex items-center justify-center"
+                className="bg-blue-600 hover:bg-blue-700 text-white p-2 w-12 h-12 rounded-md flex items-center justify-center"
               >
                 <FaPlus />
               </button>
@@ -375,7 +404,7 @@ const TutorProfileForm = ({ mode = "create" }) => {
                 ([subject, score]) => (
                   <div
                     key={subject}
-                    className="flex justify-between items-center bg-gray-50 p-3 rounded-md"
+                    className="flex justify-between items-center bg-gray-50 dark:bg-gray-800 p-3 rounded-md"
                   >
                     <div className="flex-grow">
                       <span className="font-medium">{subject}</span>
@@ -393,7 +422,7 @@ const TutorProfileForm = ({ mode = "create" }) => {
               )}
 
               {Object.keys(formData.subjects_scores).length === 0 && (
-                <p className="text-sm text-gray-500 italic">
+                <p className="text-sm text-gray-500 dark:text-gray-300 italic">
                   No subjects added yet. Add at least one subject with its
                   score.
                 </p>
@@ -404,7 +433,7 @@ const TutorProfileForm = ({ mode = "create" }) => {
           <div>
             <label
               htmlFor="edu_docs"
-              className="block mb-2 text-sm font-medium text-gray-700"
+              className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200"
             >
               Educational Documents
             </label>
@@ -413,13 +442,13 @@ const TutorProfileForm = ({ mode = "create" }) => {
                 id="edu_docs"
                 name="edu_docs"
                 type="file"
-                className="w-full px-4 py-3 rounded-md bg-white border border-gray-300 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-gray-800"
+                className="w-full px-4 py-3 rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900 text-gray-800 dark:text-white"
                 onChange={handleChange}
                 accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                 required={mode === "create"}
               />
             </div>
-            <p className="text-xs text-gray-500 mt-1 font-inter">
+            <p className="text-xs text-gray-500 dark:text-gray-300 mt-1 font-inter">
               Please upload documents proving your educational background.
               Accepted formats: PDF, DOC, DOCX, JPG, JPEG, PNG.
             </p>
@@ -428,8 +457,8 @@ const TutorProfileForm = ({ mode = "create" }) => {
           <div className="flex justify-end space-x-4 pt-4">
             <button
               type="button"
-              className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors font-poppins"
-              onClick={() => navigate(-1)}
+              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-poppins"
+              onClick={handleCancel}
             >
               Cancel
             </button>

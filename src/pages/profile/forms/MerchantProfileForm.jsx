@@ -383,6 +383,20 @@ const MerchantProfileForm = ({ mode = "create" }) => {
     }
   };
 
+  // Add this function to reset the form
+  const handleCancel = () => {
+    setFormData({
+      store_name: "",
+      nearest_university: "",
+      phone_number: "",
+      tin_number: "",
+      business_docs: null,
+    });
+    setSelectedUniversityName("");
+    setUniversitySearchTerm("");
+    setError(null);
+  };
+
   // Show loading indicator while checking for existing profile
   if (checkingProfile) {
     return (
@@ -419,203 +433,206 @@ const MerchantProfileForm = ({ mode = "create" }) => {
 
   return (
     <Layout>
-      <div className="p-8">
-        <div className="mb-6 text-center">
-          <h1 className="text-2xl font-bold text-gray-800 font-poppins">
-            {mode === "create"
-              ? "Complete Your Merchant Profile"
-              : "Edit Your Merchant Profile"}
-          </h1>
-          <p className="mt-2 text-gray-600 font-inter">
-            {mode === "create"
-              ? "Please provide your business information to complete your profile."
-              : "Update your business information below."}
-          </p>
-        </div>
-
-        {error && (
-          <div className="mb-6">
-            <Alert
-              type="error"
-              message={error}
-              onClose={() => {
-                setError(null);
-                clearError();
-              }}
-            />
-          </div>
-        )}
-
-        <form className="space-y-6" onSubmit={handleSubmit}>
-          <div>
-            <label
-              htmlFor="store_name"
-              className="block mb-2 text-sm font-medium text-gray-700"
-            >
-              Store Name
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <FaStore className="text-gray-500" />
-              </div>
-              <input
-                id="store_name"
-                name="store_name"
-                type="text"
-                className="w-full px-4 py-3 pl-10 rounded-md bg-white border border-gray-300 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 placeholder-gray-400 text-gray-800"
-                placeholder="Enter your store name"
-                value={formData.store_name}
-                onChange={handleChange}
-                required
-              />
-            </div>
-          </div>
-
-          <div ref={universityDropdownRef}>
-            <label
-              htmlFor="nearest_university_search"
-              className="block mb-2 text-sm font-medium text-gray-700"
-            >
-              Nearest University
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <FaBuilding className="text-gray-500" />
-              </div>
-              <input
-                type="text"
-                id="nearest_university_search"
-                placeholder="Search for nearest University"
-                className="w-full px-4 py-3 pl-10 rounded-md bg-white border border-gray-300 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 placeholder-gray-400 text-gray-800"
-                value={universitySearchTerm}
-                onChange={(e) => setUniversitySearchTerm(e.target.value)}
-                onFocus={() => setIsUniversityDropdownOpen(true)}
-                autoComplete="off"
-              />
-              {/* Hidden input for form submission */}
-              <input
-                type="hidden"
-                name="nearest_university"
-                value={formData.nearest_university}
-                required
-              />
-              {isUniversityDropdownOpen && filteredUniversities.length > 0 && (
-                <div className="absolute top-full left-0 right-0 z-10 mt-1 max-h-60 overflow-auto rounded-md bg-white shadow-lg border border-gray-200">
-                  {filteredUniversities.map((uni) => (
-                    <div
-                      key={uni.id}
-                      className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-800"
-                      onClick={() => selectUniversity(uni)}
-                    >
-                      {uni.name}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-            {selectedUniversityName && (
-              <div className="mt-2 p-2 bg-blue-50 rounded text-blue-700 text-sm font-medium">
-                Selected: {selectedUniversityName}
-              </div>
-            )}
-          </div>
-
-          <div>
-            <label
-              htmlFor="phone_number"
-              className="block mb-2 text-sm font-medium text-gray-700"
-            >
-              Business Phone Number
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <FaPhone className="text-gray-500" />
-              </div>
-              <input
-                id="phone_number"
-                name="phone_number"
-                type="tel"
-                className="w-full px-4 py-3 pl-10 rounded-md bg-white border border-gray-300 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 placeholder-gray-400 text-gray-800"
-                placeholder="Enter business phone number"
-                value={formData.phone_number}
-                onChange={handleChange}
-                required
-              />
-            </div>
-          </div>
-
-          <div>
-            <label
-              htmlFor="tin_number"
-              className="block mb-2 text-sm font-medium text-gray-700"
-            >
-              TIN Number
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <FaFileAlt className="text-gray-500" />
-              </div>
-              <input
-                id="tin_number"
-                name="tin_number"
-                type="text"
-                className="w-full px-4 py-3 pl-10 rounded-md bg-white border border-gray-300 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 placeholder-gray-400 text-gray-800"
-                placeholder="Enter your TIN number"
-                value={formData.tin_number}
-                onChange={handleChange}
-                required
-              />
-            </div>
-          </div>
-
-          <div>
-            <label
-              htmlFor="business_docs"
-              className="block mb-2 text-sm font-medium text-gray-700"
-            >
-              Business Documents
-            </label>
-            <div className="relative">
-              <input
-                id="business_docs"
-                name="business_docs"
-                type="file"
-                className="w-full px-4 py-3 rounded-md bg-white border border-gray-300 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-gray-800"
-                onChange={handleChange}
-                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-                required={mode === "create"}
-              />
-            </div>
-            <p className="text-xs text-gray-500 mt-1 font-inter">
-              Please upload documents proving your business registration.
-              Accepted formats: PDF, DOC, DOCX, JPG, JPEG, PNG.
+      <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center">
+        <div className="p-8 bg-white dark:bg-gray-900 rounded-xl shadow-xl w-full max-w-2xl">
+          <div className="mb-6 text-center">
+            <h1 className="text-2xl font-bold text-gray-800 dark:text-white font-poppins">
+              {mode === "create"
+                ? "Complete Your Merchant Profile"
+                : "Edit Your Merchant Profile"}
+            </h1>
+            <p className="mt-2 text-gray-600 dark:text-gray-300 font-inter">
+              {mode === "create"
+                ? "Please provide your business information to complete your profile."
+                : "Update your business information below."}
             </p>
           </div>
 
-          <div className="flex justify-end space-x-4 pt-4">
-            <button
-              type="button"
-              className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors font-poppins"
-              onClick={() => navigate(-1)}
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center justify-center transition-colors shadow-md font-poppins"
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <Spinner size="sm" />
-              ) : (
-                <>
-                  <FaSave className="mr-2" />
-                  {mode === "create" ? "Create Profile" : "Save Changes"}
-                </>
+          {error && (
+            <div className="mb-6">
+              <Alert
+                type="error"
+                message={error}
+                onClose={() => {
+                  setError(null);
+                  clearError();
+                }}
+              />
+            </div>
+          )}
+
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            <div>
+              <label
+                htmlFor="store_name"
+                className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200"
+              >
+                Store Name
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <FaStore className="text-gray-500" />
+                </div>
+                <input
+                  id="store_name"
+                  name="store_name"
+                  type="text"
+                  className="w-full px-4 py-3 pl-10 rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900 placeholder-gray-400 text-gray-800 dark:text-white"
+                  placeholder="Enter your store name"
+                  value={formData.store_name}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+
+            <div ref={universityDropdownRef}>
+              <label
+                htmlFor="nearest_university_search"
+                className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200"
+              >
+                Nearest University
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <FaBuilding className="text-gray-500" />
+                </div>
+                <input
+                  type="text"
+                  id="nearest_university_search"
+                  placeholder="Search for nearest University"
+                  className="w-full px-4 py-3 pl-10 rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900 placeholder-gray-400 text-gray-800 dark:text-white"
+                  value={universitySearchTerm}
+                  onChange={(e) => setUniversitySearchTerm(e.target.value)}
+                  onFocus={() => setIsUniversityDropdownOpen(true)}
+                  autoComplete="off"
+                />
+                {/* Hidden input for form submission */}
+                <input
+                  type="hidden"
+                  name="nearest_university"
+                  value={formData.nearest_university}
+                  required
+                />
+                {isUniversityDropdownOpen &&
+                  filteredUniversities.length > 0 && (
+                    <div className="absolute top-full left-0 right-0 z-10 mt-1 max-h-60 overflow-auto rounded-md bg-white shadow-lg border border-gray-200">
+                      {filteredUniversities.map((uni) => (
+                        <div
+                          key={uni.id}
+                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-800"
+                          onClick={() => selectUniversity(uni)}
+                        >
+                          {uni.name}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+              </div>
+              {selectedUniversityName && (
+                <div className="mt-2 p-2 bg-blue-50 rounded text-blue-700 text-sm font-medium">
+                  Selected: {selectedUniversityName}
+                </div>
               )}
-            </button>
-          </div>
-        </form>
+            </div>
+
+            <div>
+              <label
+                htmlFor="phone_number"
+                className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200"
+              >
+                Business Phone Number
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <FaPhone className="text-gray-500" />
+                </div>
+                <input
+                  id="phone_number"
+                  name="phone_number"
+                  type="tel"
+                  className="w-full px-4 py-3 pl-10 rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900 placeholder-gray-400 text-gray-800 dark:text-white"
+                  placeholder="Enter business phone number"
+                  value={formData.phone_number}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="tin_number"
+                className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200"
+              >
+                TIN Number
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <FaFileAlt className="text-gray-500" />
+                </div>
+                <input
+                  id="tin_number"
+                  name="tin_number"
+                  type="text"
+                  className="w-full px-4 py-3 pl-10 rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900 placeholder-gray-400 text-gray-800 dark:text-white"
+                  placeholder="Enter your TIN number"
+                  value={formData.tin_number}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="business_docs"
+                className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200"
+              >
+                Business Documents
+              </label>
+              <div className="relative">
+                <input
+                  id="business_docs"
+                  name="business_docs"
+                  type="file"
+                  className="w-full px-4 py-3 rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900 text-gray-800 dark:text-white"
+                  onChange={handleChange}
+                  accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                  required={mode === "create"}
+                />
+              </div>
+              <p className="text-xs text-gray-500 dark:text-gray-300 mt-1 font-inter">
+                Please upload documents proving your business registration.
+                Accepted formats: PDF, DOC, DOCX, JPG, JPEG, PNG.
+              </p>
+            </div>
+
+            <div className="flex justify-end space-x-4 pt-4">
+              <button
+                type="button"
+                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-poppins"
+                onClick={handleCancel}
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center justify-center transition-colors shadow-md font-poppins"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <Spinner size="sm" />
+                ) : (
+                  <>
+                    <FaSave className="mr-2" />
+                    {mode === "create" ? "Create Profile" : "Save Changes"}
+                  </>
+                )}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </Layout>
   );

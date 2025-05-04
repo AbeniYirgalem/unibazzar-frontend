@@ -22,19 +22,25 @@ import {
 
 const ProfileSection = ({ title, children }) => (
   <div className="mb-8">
-    <h2 className="text-xl font-semibold text-neutral-800 mb-4 font-poppins">
+    <h2 className="text-xl font-semibold text-neutral-800 dark:text-white mb-4 font-poppins">
       {title}
     </h2>
-    <div className="bg-white rounded-lg shadow-md p-6">{children}</div>
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+      {children}
+    </div>
   </div>
 );
 
 const ProfileField = ({ icon, label, value }) => (
   <div className="flex items-start mb-4 last:mb-0">
-    <div className="p-2 rounded-full bg-blue-50 mr-3">{icon}</div>
+    <div className="p-2 rounded-full bg-blue-50 dark:bg-blue-900 mr-3">
+      {icon}
+    </div>
     <div>
-      <p className="text-sm text-neutral-500 font-inter">{label}</p>
-      <p className="text-neutral-800 font-medium font-inter">
+      <p className="text-sm text-neutral-500 dark:text-gray-300 font-inter">
+        {label}
+      </p>
+      <p className="text-neutral-800 dark:text-white font-medium font-inter">
         {value || "Not provided"}
       </p>
     </div>
@@ -77,8 +83,8 @@ function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white flex justify-center items-center">
-        <div className="flex flex-col items-center bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-lg p-8 rounded-2xl shadow-xl border border-gray-100 text-gray-800">
+      <div className="min-h-screen bg-white dark:bg-gray-900 flex justify-center items-center">
+        <div className="flex flex-col items-center bg-gradient-to-br from-white/80 to-white/60 dark:from-gray-800/80 dark:to-gray-900/60 backdrop-blur-lg p-8 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 text-gray-800 dark:text-white">
           <svg
             className="animate-spin h-10 w-10 text-blue-600"
             xmlns="http://www.w3.org/2000/svg"
@@ -99,7 +105,7 @@ function ProfilePage() {
               d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
             ></path>
           </svg>
-          <p className="mt-4 text-gray-700 text-lg font-inter">
+          <p className="mt-4 text-gray-700 dark:text-gray-300 text-lg font-inter">
             Loading profile...
           </p>
         </div>
@@ -109,8 +115,8 @@ function ProfilePage() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-white flex justify-center items-center">
-        <div className="text-center bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-lg p-8 rounded-2xl shadow-xl border border-gray-100 text-gray-800">
+      <div className="min-h-screen bg-white dark:bg-gray-900 flex justify-center items-center">
+        <div className="text-center bg-gradient-to-br from-white/80 to-white/60 dark:from-gray-800/80 dark:to-gray-900/60 backdrop-blur-lg p-8 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 text-gray-800 dark:text-white">
           <p className="text-xl mb-4 font-inter">User profile not found</p>
           <button
             className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md text-white font-poppins"
@@ -124,7 +130,7 @@ function ProfilePage() {
   }
 
   return (
-    <div className="bg-white pt-20 pb-10 px-4 sm:px-6 lg:px-8">
+    <div className="bg-white dark:bg-gray-900 pt-20 pb-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
         {error && (
           <div className="bg-red-100 border border-red-200 text-red-700 p-3 rounded-lg mb-6">
@@ -188,10 +194,10 @@ function ProfilePage() {
                     )}
                   </div>
                 </div>
-                <h3 className="text-xl font-bold font-poppins">
+                <h3 className="text-xl font-bold font-poppins text-gray-800 dark:text-white">
                   {user.full_name}
                 </h3>
-                <p className="text-neutral-500 capitalize mb-4 font-inter">
+                <p className="text-neutral-500 dark:text-gray-300 capitalize mb-4 font-inter">
                   {user.role === "campus_admin"
                     ? "Campus Admin"
                     : user.role === "merchant"
@@ -230,7 +236,7 @@ function ProfilePage() {
                 label="Phone Number"
                 value={user.phone_number}
               />
-              <p className="text-xs text-neutral-500 mt-4 font-inter">
+              <p className="text-xs text-neutral-500 dark:text-gray-300 mt-4 font-inter">
                 Member since {new Date(user.date_joined).toLocaleDateString()}
               </p>
             </ProfileSection>
@@ -303,7 +309,7 @@ function ProfilePage() {
 
             {/* Activity Section */}
             <ProfileSection title="Recent Activity">
-              <div className="py-6 text-center text-neutral-500 font-inter">
+              <div className="py-6 text-center text-neutral-500 dark:text-gray-300 font-inter">
                 <p>No recent activity to display</p>
               </div>
             </ProfileSection>
