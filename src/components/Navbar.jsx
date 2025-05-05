@@ -9,6 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../redux/slices/authSlice";
 import { IoMoon, IoSunny } from "react-icons/io5";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -115,10 +116,33 @@ export default function Navbar() {
 
               <button
                 onClick={toggleTheme}
-                className="text-2xl text-gray-800 dark:text-gray-300 hover:text-emerald-500 transition"
+                className="relative text-2xl text-gray-800 dark:text-gray-300  transition focus:outline-none overflow-visible cursor-pointer"
                 aria-label="Toggle Theme"
               >
-                {isDarkMode ? <IoSunny /> : <IoMoon />}
+                <motion.span
+                  key={isDarkMode ? "sun" : "moon"}
+                  initial={{ rotate: 0, scale: 0.7, opacity: 0 }}
+                  animate={{ rotate: 360, scale: 1.2, opacity: 1 }}
+                  exit={{ rotate: -180, scale: 0.7, opacity: 0 }}
+                  transition={{
+                    duration: 0.5,
+                    type: "spring",
+                    stiffness: 200,
+                    damping: 15,
+                  }}
+                  className="inline-block"
+                  style={{ willChange: "transform, opacity" }}
+                >
+                  {isDarkMode ? (
+                    <IoSunny className="drop-shadow-[0_0_8px_rgba(15,107,174,0.7)]" />
+                  ) : (
+                    <IoMoon className="drop-shadow-[0_0_8px_rgba(15,107,174,0.7)]" />
+                  )}
+                </motion.span>
+                <span
+                  className="absolute -inset-2 rounded-full pointer-events-none transition-all duration-300 group-hover:shadow-[0_0_16px_4px_rgba(15,107,174,0.3)]"
+                  aria-hidden="true"
+                ></span>
               </button>
 
               {user && (
@@ -214,10 +238,33 @@ export default function Navbar() {
 
               <button
                 onClick={toggleTheme}
-                className="text-2xl text-gray-800 dark:text-gray-300 hover:text-emerald-500 transition"
+                className="relative text-2xl text-gray-800 dark:text-gray-300 hover:text-[#152B67] transition focus:outline-none overflow-visible cursor-pointer"
                 aria-label="Toggle Theme"
               >
-                {isDarkMode ? <IoSunny /> : <IoMoon />}
+                <motion.span
+                  key={isDarkMode ? "sun-mobile" : "moon-mobile"}
+                  initial={{ rotate: 0, scale: 0.7, opacity: 0 }}
+                  animate={{ rotate: 360, scale: 1.2, opacity: 1 }}
+                  exit={{ rotate: -180, scale: 0.7, opacity: 0 }}
+                  transition={{
+                    duration: 0.5,
+                    type: "spring",
+                    stiffness: 200,
+                    damping: 15,
+                  }}
+                  className="inline-block"
+                  style={{ willChange: "transform, opacity" }}
+                >
+                  {isDarkMode ? (
+                    <IoSunny className="drop-shadow-[0_0_8px_rgba(15,107,174,0.7)]" />
+                  ) : (
+                    <IoMoon className="drop-shadow-[0_0_8px_rgba(15,107,174,0.7)]" />
+                  )}
+                </motion.span>
+                <span
+                  className="absolute -inset-2 rounded-full pointer-events-none transition-all duration-300 group-hover:shadow-[0_0_16px_4px_rgba(15,107,174,0.3)]"
+                  aria-hidden="true"
+                ></span>
               </button>
 
               {user && (

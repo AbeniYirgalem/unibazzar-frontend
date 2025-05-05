@@ -4,7 +4,7 @@ import { FaLock, FaHome, FaSignInAlt } from "react-icons/fa";
 
 function UnauthorizedPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900 px-4">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-white dark:bg-gray-900 px-4">
       <div className="bg-gradient-to-br from-white/80 to-white/60 dark:from-gray-800/80 dark:to-gray-900/60 backdrop-blur-lg p-8 rounded-2xl shadow-xl w-full max-w-md border border-gray-100 dark:border-gray-700 text-gray-800 dark:text-white text-center">
         <div className="mb-6">
           <div className="bg-red-500/20 dark:bg-red-900/40 w-20 h-20 mx-auto rounded-full flex items-center justify-center">

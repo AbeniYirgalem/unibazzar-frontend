@@ -25,6 +25,7 @@ import PasswordResetPage from "./pages/PasswordResetPage";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserProfile, verifyToken } from "./redux/slices/authSlice";
+import ThemeToggle from "./components/ui/ThemeToggle";
 
 // Import profile form components
 import StudentProfileForm from "./pages/profile/forms/StudentProfileForm";
@@ -94,18 +95,12 @@ function AppContent() {
   return (
     <div className="min-h-screen bg-white text-gray-900 dark:bg-gray-900 dark:text-white">
       <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
-
-      {/* Theme Toggle Button */}
-      <div className="text-right p-4">
-        <button
-          onClick={toggleTheme}
-          className="text-2xl text-gray-800 dark:text-white focus:outline-none"
-          aria-label="Toggle Theme"
-        >
-          {isDarkMode ? <IoSunny /> : <IoMoon />}
-        </button>
-      </div>
-
+      {/* Theme Toggle Button for pages without Navbar */}
+      {!shouldShowNavbar && (
+        <div className="text-right p-4">
+          <ThemeToggle />
+        </div>
+      )}
       {shouldShowNavbar && <Navbar />}
       <main className="flex-grow">
         <Routes>
