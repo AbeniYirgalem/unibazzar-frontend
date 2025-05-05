@@ -32,7 +32,7 @@ This project is a full-stack web application built with React (frontend) and a D
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/unibazzar-frontend.git
+git clone https://github.com/AbeniYirgalem/unibazzar-frontend.git
 cd unibazzar-frontend
 ```
 
