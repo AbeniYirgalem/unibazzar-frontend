@@ -47,7 +47,7 @@ export default function ThemeToggle({ className = "" }) {
         animate={{ rotate: 360, scale: 1.2, opacity: 1 }}
         exit={{ rotate: -180, scale: 0.7, opacity: 0 }}
         transition={{
-          duration: 0.5,
+          duration: 1.5, // slower animation
           type: "spring",
           stiffness: 200,
           damping: 15,
