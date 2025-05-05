@@ -8,7 +8,7 @@ const testimonials = [
     university: "Addis Ababa University",
     rating: 5,
     text: "I found the perfect textbook for my course at a great price. UniBazzar made the process so easy and safe!",
-    image: "/assets/default_user.png",
+    image: "/assets/default_user_1.webp",
   },
   {
     id: 2,
@@ -16,7 +16,7 @@ const testimonials = [
     university: "Bahir Dar University",
     rating: 5,
     text: "Selling my old electronics was quick and hassle-free. I love how UniBazzar connects students across campuses.",
-    image: "/assets/default_user.png",
+    image: "/assets/default_user_1.webp",
   },
   {
     id: 3,
@@ -24,7 +24,7 @@ const testimonials = [
     university: "Haramaya University",
     rating: 4,
     text: "The tutoring services I found here really helped me boost my grades. Highly recommended for all students!",
-    image: "/assets/default_user.png",
+    image: "/assets/default_user_1.webp",
   },
 ];
 
@@ -87,62 +87,62 @@ const TestimonialSection = () => {
           </p>
           <div className="flex flex-wrap justify-center items-center gap-8 opacity-70">
             <img
-              src="/assets/default_user.png"
+              src="/assets/default_user_1.webp"
               alt="UniBazzar"
               className="h-8"
             />
             <img
-              src="/assets/default_user.png"
+              src="/assets/default_user_1.webp"
               alt="Campus"
               className="h-8 rounded"
             />
             <img
-              src="/assets/default_user.png"
+              src="/assets/default_user_1.webp"
               alt="User"
               className="h-8 rounded-full"
             />
             <img
-              src="/assets/default_user.png"
+              src="/assets/default_user_1.webp"
               alt="UniBazzar"
               className="h-8"
             />
             <img
-              src="/assets/default_user.png"
+              src="/assets/default_user_1.webp"
               alt="Campus"
               className="h-8 rounded"
             />
             <img
-              src="/assets/default_user.png"
+              src="/assets/default_user_1.webp"
               alt="User"
               className="h-8 rounded-full"
             />
             <img
-              src="/assets/default_user.png"
+              src="/assets/default_user_1.webp"
               alt="UniBazzar"
               className="h-8"
             />
             <img
-              src="/assets/default_user.png"
+              src="/assets/default_user_1.webp"
               alt="Campus"
               className="h-8 rounded"
             />
             <img
-              src="/assets/default_user.png"
+              src="/assets/default_user_1.webp"
               alt="User"
               className="h-8 rounded-full"
             />
             <img
-              src="/assets/default_user.png"
+              src="/assets/default_user_1.webp"
               alt="UniBazzar"
               className="h-8"
             />
             <img
-              src="/assets/default_user.png"
+              src="/assets/default_user_1.webp"
               alt="Campus"
               className="h-8 rounded"
             />
             <img
-              src="/assets/default_user.png"
+              src="/assets/default_user_1.webp"
               alt="User"
               className="h-8 rounded-full"
             />
