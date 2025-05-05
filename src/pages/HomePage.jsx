@@ -11,7 +11,7 @@ import JoinCommunity from "../components/JoinCommunity";
 
 function HomePage() {
   return (
-    <div className="flex flex-col min-h-screen bg-white text-gray-900 dark:bg-gray-900 dark:text-white">
+    <div className="flex flex-col min-h-screen bg-white text-gray-900 dark:bg-gray-900 dark:text-white pt-10">
       {/* Hero Section */}
       <section
         className="relative bg-cover bg-center h-screen flex items-center justify-center"
@@ -22,7 +22,18 @@ function HomePage() {
         <div className="absolute inset-0 bg-black/60" />
         <div className="relative z-10 text-white text-center px-4 max-w-2xl p-8 rounded-lg drop-shadow-lg">
           <h1 className="text-5xl md:text-8xl font-extrabold mb-6">
-            Welcome to UniBazzar
+            <span className="text-white">Welcome to </span>
+            <span
+              className="bg-gradient-to-r from-[#172F6C] via-[#248BD6] via-40% via-[#5BE6FF] via-70% to-[#248BD6] bg-clip-text text-transparent animate-gradient-move font-extrabold"
+              style={{
+                backgroundImage:
+                  "linear-gradient(90deg, #172F6C 0%, #248BD6 40%, #5BE6FF 70%, #248BD6 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              UniBazzar
+            </span>
           </h1>
           <p className="text-xl md:text-2xl mb-8">
             Your one-stop campus marketplace for textbooks, notes, tutoring, and
@@ -30,9 +41,25 @@ function HomePage() {
           </p>
           <Link
             to="/listings"
-            className="bg-yellow-400 hover:bg-yellow-300 text-blue-900 font-bold px-8 py-3 rounded-full text-lg shadow-md transition"
+            className="relative inline-flex items-center justify-center px-10 py-3 rounded-full text-lg font-semibold bg-gradient-to-r from-blue-600 to-blue-400 text-white shadow-xl transition-all duration-300 hover:scale-105 hover:from-blue-700 hover:to-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-300/40 group overflow-hidden"
           >
-            Start Browsing
+            <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/10 blur-lg animate-pulse"></span>
+            <span className="relative z-10 flex items-center gap-2">
+              <svg
+                className="w-6 h-6 text-yellow-300 animate-bounce"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0h6"
+                />
+              </svg>
+              Start Browsing
+            </span>
           </Link>
         </div>
       </section>
@@ -78,8 +105,6 @@ function HomePage() {
         </div>
       </section>
 
-      <JoinCommunity />
-
       {/* How It Works Section */}
       <section className="py-20 bg-gradient-to-r from-gray-50 via-white to-gray-100 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800">
         <div className="max-w-7xl mx-auto px-6 text-center">
@@ -101,7 +126,9 @@ function HomePage() {
               {
                 title: "Secure Payments",
                 desc: "Pay safely via Telebirr or trusted payment methods.",
-                icon: <ShieldCheck className="w-16 h-16 text-blue-600 mx-auto" />,
+                icon: (
+                  <ShieldCheck className="w-16 h-16 text-blue-600 mx-auto" />
+                ),
               },
             ].map((item, index) => (
               <div
@@ -151,16 +178,41 @@ function HomePage() {
                 className="bg-gray-50 dark:bg-gray-700 p-8 rounded-2xl shadow-md hover:shadow-lg transition duration-300 text-left"
               >
                 <Quote className="w-8 h-8 text-blue-500 mb-4" />
-                <p className="text-gray-700 dark:text-gray-200 italic mb-6">“{item.quote}”</p>
-                <p className="font-semibold text-gray-900 dark:text-white">{item.name}</p>
-                <p className="text-sm text-gray-500 dark:text-gray-300">{item.university}</p>
+                <p className="text-gray-700 dark:text-gray-200 italic mb-6">
+                  “{item.quote}”
+                </p>
+                <p className="font-semibold text-gray-900 dark:text-white">
+                  {item.name}
+                </p>
+                <p className="text-sm text-gray-500 dark:text-gray-300">
+                  {item.university}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
+
+      <JoinCommunity />
     </div>
   );
 }
 
 export default HomePage;
+
+/* Add this to your global CSS (e.g., index.css or App.css):
+@keyframes glassFade {
+  0% {
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37), 0 0 0 0 rgba(59,130,246,0.3);
+    transform: scale(1) rotate(-1deg);
+  }
+  50% {
+    box-shadow: 0 12px 48px 0 rgba(59,130,246,0.25), 0 0 40px 10px rgba(59,130,246,0.15);
+    transform: scale(1.03) rotate(1deg);
+  }
+  100% {
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37), 0 0 0 0 rgba(59,130,246,0.3);
+    transform: scale(1) rotate(-1deg);
+  }
+}
+*/
