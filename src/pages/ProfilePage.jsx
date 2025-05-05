@@ -19,6 +19,7 @@ import {
   FaFilePdf,
   FaUserPlus,
 } from "react-icons/fa";
+import ThemeToggle from "../components/ui/ThemeToggle";
 
 const ProfileSection = ({ title, children }) => (
   <div className="mb-8">
