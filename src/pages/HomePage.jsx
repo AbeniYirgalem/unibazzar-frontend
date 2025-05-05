@@ -19,7 +19,7 @@ function HomePage() {
       <section
         className="relative bg-cover bg-center h-screen flex items-center justify-center"
         style={{
-          backgroundImage: "url('./assets/pexels-rdne-7683731.jpg')",
+          backgroundImage: "url('./assets/hero_background.webp')",
         }}
       >
         <div className="absolute inset-0 bg-black/60" />
