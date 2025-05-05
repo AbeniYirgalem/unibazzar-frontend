@@ -189,6 +189,10 @@ function LoginPage() {
         !!token
       );
       if (isAuthenticated && user && token) {
+        // Ensure token is in localStorage
+        if (!localStorage.getItem("token")) {
+          localStorage.setItem("token", token);
+        }
         console.log(
           `[Login Redirect Effect] User authenticated. Role: ${user.role}, ID: ${user.id}`
         );
