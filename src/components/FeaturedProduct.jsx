@@ -1,7 +1,8 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Star, ShoppingBag, Heart } from "lucide-react";
 import { addToCart } from "../redux/slices/cartSlice";
+import { toggleFavorite } from "../redux/slices/favoriteSlice";
 import { Link } from "react-router-dom";
 
 const products = [
@@ -10,7 +11,7 @@ const products = [
     name: "Wireless Headphones",
     price: 299.99,
     image:
-      "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/airpods-max-select-202409-midnight_FV1?wid=976&hei=916&fmt=jpeg&qlt=90&.v=azQxRkVJKzd6V3J0aGNqWFhLMzBmdmVWNWdHYnp5cHkwMldsSElEOHpyd0cyWGRFNFZ5QTk3bFlteis2Q2NNaWpENFdPQTN0TWQ4ejhtTWxrUHVDeElGZGV2eWhZaEljUzNSeDlxcDVuWGszbTFldUtUQzN0ellEWHZ3UUFYSS8",
+      "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/airpods-max-select-202409-midnight_FV1?wid=976&hei=916&fmt=jpeg&qlt=90",
     rating: 4.8,
     category: "Electronics",
     isNew: true,
@@ -29,7 +30,7 @@ const products = [
     name: "Laptop Stand",
     price: 24.99,
     image:
-      "https://images.pexels.com/photos/18105/pexels-photo.jpg?auto=compress&fit=crop&w=600&q=80", // Laptop
+      "https://images.pexels.com/photos/18105/pexels-photo.jpg?auto=compress&fit=crop&w=600&q=80",
     rating: 4.9,
     category: "Accessories",
     isNew: true,
@@ -47,6 +48,9 @@ const products = [
 
 const FeaturedProduct = () => {
   const dispatch = useDispatch();
+  const favorites = useSelector((state) => state.favorites);
+
+  const isFavorite = (id) => favorites.includes(id);
 
   return (
     <section className="py-20 bg-gray-50 dark:bg-gray-900">
@@ -60,6 +64,7 @@ const FeaturedProduct = () => {
             textbooks and more.
           </p>
         </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {products.map((product) => (
             <div key={product.id} className="group">
@@ -70,19 +75,28 @@ const FeaturedProduct = () => {
                   </span>
                 )}
                 <button
-                  className="absolute top-3 right-3 z-10 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:text-red-500 p-2 rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer"
+                  onClick={() => dispatch(toggleFavorite(product.id))}
+                  className={`absolute top-3 right-3 z-10 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:text-red-500 p-2 rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer ${
+                    isFavorite(product.id) ? "text-red-500 opacity-100" : ""
+                  }`}
                   type="button"
+                  aria-label="Mark as Read Later"
                 >
-                  <Heart size={18} />
+                  <Heart
+                    size={18}
+                    fill={isFavorite(product.id) ? "red" : "none"}
+                  />
                 </button>
+
                 <img
                   src={product.image}
                   alt={product.name}
                   className="w-full h-full object-cover rounded-lg border-4 border-blue-100 dark:border-gray-700 shadow-lg mx-auto transition-transform duration-500 group-hover:scale-105"
                 />
+
                 <div className="absolute inset-x-0 bottom-0 bg-white dark:bg-gray-800 bg-opacity-90 dark:bg-opacity-90 py-3 px-4 opacity-0 translate-y-full group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
                   <button
-                    className="w-full flex items-center justify-center space-x-2 bg-gray-900 dark:bg-blue-700 hover:bg-black dark:hover:bg-blue-800 text-white py-2 rounded-lg font-medium transition-colors cursor-pointer group-hover:cursor-pointer"
+                    className="w-full flex items-center justify-center space-x-2 bg-gray-900 dark:bg-blue-700 hover:bg-black dark:hover:bg-blue-800 text-white py-2 rounded-lg font-medium transition-colors cursor-pointer"
                     onClick={() =>
                       dispatch(
                         addToCart({
@@ -99,6 +113,7 @@ const FeaturedProduct = () => {
                   </button>
                 </div>
               </div>
+
               <div className="text-center">
                 <span className="text-sm text-gray-500 dark:text-gray-400 mb-1 block">
                   {product.category}
@@ -119,6 +134,7 @@ const FeaturedProduct = () => {
             </div>
           ))}
         </div>
+
         <div className="mt-12 text-center">
           <Link
             to="/listings"

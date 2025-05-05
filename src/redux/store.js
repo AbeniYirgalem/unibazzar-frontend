@@ -3,12 +3,14 @@ import cartReducer from "./slices/cartSlice";
 import authReducer from "./slices/authSlice";
 import userReducer from "./slices/userSlice";
 import { injectStore } from "./api/uniBazzarApi";
+import favoriteReducer from "./slices/favoriteSlice";
 
 const store = configureStore({
   reducer: {
     cart: cartReducer,
     auth: authReducer,
     user: userReducer,
+    favorites: favoriteReducer,
   },
 });
 

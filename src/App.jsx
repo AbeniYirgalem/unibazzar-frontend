@@ -26,6 +26,7 @@ import UnauthorizedPage from "./pages/UnauthorizedPage";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserProfile, verifyToken } from "./redux/slices/authSlice";
 import ThemeToggle from "./components/ui/ThemeToggle";
+import ThankYou from "./pages/ThankYou";
 
 // Import profile form components
 import StudentProfileForm from "./pages/profile/forms/StudentProfileForm";
@@ -114,6 +115,7 @@ function AppContent() {
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/unauthorized" element={<UnauthorizedPage />} />
+          <Route path="/thank-you" element={<ThankYou />} />
 
           {/* Password Reset Routes */}
           <Route path="/forgot-password" element={<PasswordResetPage />} />

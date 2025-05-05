@@ -103,8 +103,8 @@ export default function Navbar() {
     <nav
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 backdrop-blur-xl ${
         isScrolled
-          ? "bg-white/70 dark:bg-[#0a1535]/80 shadow-2xl py-2"
-          : "bg-white/30 dark:bg-[#0a1535]/40 py-4"
+          ? "bg-white/70 dark:bg-[#0a1535]/80 shadow-2xl " // Reduced padding
+          : "bg-white/30 dark:bg-[#0a1535]/40 " // Reduced padding
       }`}
     >
       {/* Glassmorphic & Glow Effects */}
