@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../redux/slices/cartSlice";
 import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs";
 import ProductGrid from "../components/product/ProductGrid";
 // import { toast } from "react-toastify"; // Remove if not installed
@@ -21,6 +23,8 @@ const MarketplacePage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [filteredProducts, setFilteredProducts] = useState([]);
+
+  const dispatch = useDispatch();
 
   // Replace with your actual auth token logic
   const getAuthToken = () => localStorage.getItem("token");
@@ -91,7 +95,7 @@ const MarketplacePage = () => {
     // eslint-disable-next-line
   }, [categoryParam]);
 
-  // Filter products based on active tab and selected category
+  // Filter products based on active tab and selected category, then randomize order
   useEffect(() => {
     let products = [];
     switch (activeTab) {
@@ -114,6 +118,8 @@ const MarketplacePage = () => {
         (product) => product.category_id === selectedCategory
       );
     }
+    // Randomize the order of products
+    products = products.slice().sort(() => Math.random() - 0.5);
     setFilteredProducts(products);
   }, [
     activeTab,
@@ -130,8 +136,7 @@ const MarketplacePage = () => {
 
   // Handle add to cart (no toast)
   const handleAddToCart = (product) => {
-    // Optionally implement cart logic here
-    // alert(`${product.name} added to cart!`);
+    dispatch(addToCart({ ...product, price: Number(product.price) }));
   };
 
   // Handle category selection
@@ -142,48 +147,89 @@ const MarketplacePage = () => {
   // Handle error clear
   const clearError = () => setError(null);
 
+  // Build category filter buttons (including static types)
+  const staticCategories = [
+    { id: "all", name: "All" },
+    { id: "merchant", name: "Products" },
+    { id: "student", name: "Notes & Textbooks" },
+    { id: "tutor", name: "Tutoring" },
+    { id: "food", name: "Food" },
+  ];
+  // Merge API categories (if any) with static, avoiding duplicates
+  const allCategoryButtons = [
+    ...staticCategories,
+    ...categories.filter(
+      (cat) =>
+        !staticCategories.some(
+          (s) => s.name.toLowerCase() === cat.name?.toLowerCase()
+        )
+    ),
+  ];
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pt-10 m-20">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <h1 className="text-2xl font-bold">Marketplace</h1>
         <Tabs
           value={activeTab}
           onValueChange={handleTabChange}
           className="w-full md:w-auto"
-        >
-          <TabsList>
-            <TabsTrigger value="all">All</TabsTrigger>
-            <TabsTrigger value="merchant">Merchant</TabsTrigger>
-            <TabsTrigger value="student">Student</TabsTrigger>
-            <TabsTrigger value="tutor">Tutoring</TabsTrigger>
-          </TabsList>
-        </Tabs>
+        ></Tabs>
       </div>
       {/* Category filter buttons */}
-      <div className="flex flex-wrap gap-2 mb-4">
-        <button
-          className={`px-3 py-1 rounded ${
-            !selectedCategory
-              ? "bg-blue-600 text-white"
-              : "bg-gray-200 dark:bg-gray-700 dark:text-gray-200"
-          }`}
-          onClick={() => handleCategorySelect(null)}
-        >
-          All Categories
-        </button>
-        {categories.map((cat) => (
-          <button
-            key={cat.id}
-            className={`px-3 py-1 rounded ${
-              selectedCategory === cat.id
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 dark:bg-gray-700 dark:text-gray-200"
-            }`}
-            onClick={() => handleCategorySelect(cat.id)}
-          >
-            {cat.name}
-          </button>
-        ))}
+      <div className="flex flex-wrap gap-2 mb-4 justify-center">
+        {allCategoryButtons.map((cat) => {
+          // Only show button if there are products for this category/type
+          let hasProducts = false;
+          if (cat.id === "all") {
+            hasProducts =
+              merchantProducts.length > 0 ||
+              studentProducts.length > 0 ||
+              tutorServices.length > 0;
+          } else if (cat.id === "merchant") {
+            hasProducts = merchantProducts.length > 0;
+          } else if (cat.id === "student") {
+            hasProducts = studentProducts.length > 0;
+          } else if (cat.id === "tutor") {
+            hasProducts = tutorServices.length > 0;
+          } else if (cat.id === "food") {
+            // If you have a foodProducts array, check it here. Otherwise, hide.
+            hasProducts = false;
+          } else {
+            // For dynamic categories, check if any product matches the category id
+            hasProducts = [
+              ...merchantProducts,
+              ...studentProducts,
+              ...tutorServices,
+            ].some((p) => p.category_id === cat.id);
+          }
+          if (!hasProducts) return null;
+          return (
+            <button
+              key={cat.id}
+              className={`px-3 py-1 rounded ${
+                activeTab === cat.id || selectedCategory === cat.id
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-200 dark:bg-gray-700 dark:text-gray-200"
+              }`}
+              onClick={() => {
+                if (
+                  ["all", "merchant", "student", "tutor", "food"].includes(
+                    cat.id
+                  )
+                ) {
+                  setActiveTab(cat.id);
+                  setSelectedCategory(null);
+                } else {
+                  setSelectedCategory(cat.id);
+                  setActiveTab("all");
+                }
+              }}
+            >
+              {cat.name}
+            </button>
+          );
+        })}
       </div>
       {error && (
         <div className="bg-red-100 text-red-800 p-2 rounded mb-4">

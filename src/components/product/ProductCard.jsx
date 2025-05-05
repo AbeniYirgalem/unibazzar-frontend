@@ -80,7 +80,7 @@ const ProductCard = ({ product, onAddToCart, uniqueKey }) => {
           </span>
         </div>
         <span className="font-semibold text-gray-900 dark:text-white">
-          ${isNaN(price) ? product.price : price.toFixed(2)}
+          ETB{isNaN(price) ? product.price : price.toFixed(2)}
         </span>
       </div>
     </div>
