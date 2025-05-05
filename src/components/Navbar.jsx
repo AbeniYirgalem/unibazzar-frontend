@@ -1,6 +1,10 @@
 import { Fragment, useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { Bars3Icon, XMarkIcon, ShoppingCartIcon } from "@heroicons/react/24/outline";
+import {
+  Bars3Icon,
+  XMarkIcon,
+  ShoppingCartIcon,
+} from "@heroicons/react/24/outline";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../redux/slices/authSlice";
@@ -25,7 +29,9 @@ export default function Navbar() {
       setIsDarkMode(false);
       document.documentElement.classList.remove("dark");
     } else {
-      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const prefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches;
       setIsDarkMode(prefersDark);
       document.documentElement.classList.toggle("dark", prefersDark);
     }
@@ -44,8 +50,22 @@ export default function Navbar() {
   };
 
   const handleLogout = () => {
-    dispatch(logoutUser());
-    navigate("/login");
+    dispatch(logoutUser())
+      .then(() => {
+        localStorage.removeItem("authTokens");
+        localStorage.removeItem("newUserData");
+        sessionStorage.clear();
+
+        console.log("Logout successful, redirecting to login page");
+        navigate("/login", { replace: true });
+      })
+      .catch((error) => {
+        console.error("Error during logout:", error);
+        localStorage.removeItem("authTokens");
+        localStorage.removeItem("newUserData");
+        sessionStorage.clear();
+        navigate("/login", { replace: true });
+      });
   };
 
   const commonLinks = [
@@ -74,7 +94,10 @@ export default function Navbar() {
                 <Bars3Icon className="h-6 w-6" />
               </button>
 
-              <Link to="/" className="text-xl lg:text-2xl font-bold text-emerald-500">
+              <Link
+                to="/"
+                className="text-xl lg:text-2xl font-bold text-emerald-500"
+              >
                 UniBazzar
               </Link>
             </div>
@@ -114,7 +137,9 @@ export default function Navbar() {
 
               {user ? (
                 <>
-                  <span className="text-gray-800 dark:text-gray-300">{user.name}</span>
+                  <span className="text-gray-800 dark:text-gray-300">
+                    {user.name}
+                  </span>
                   <button
                     onClick={handleLogout}
                     className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition"
@@ -124,8 +149,18 @@ export default function Navbar() {
                 </>
               ) : (
                 <>
-                  <Link to="/login" className="hover:text-emerald-500 transition">Login</Link>
-                  <Link to="/signup" className="bg-emerald-500 text-white px-4 py-1.5 rounded hover:bg-emerald-600 transition">Sign Up</Link>
+                  <Link
+                    to="/login"
+                    className="hover:text-emerald-500 transition"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    to="/signup"
+                    className="bg-emerald-500 text-white px-4 py-1.5 rounded hover:bg-emerald-600 transition"
+                  >
+                    Sign Up
+                  </Link>
                 </>
               )}
             </div>
@@ -135,7 +170,11 @@ export default function Navbar() {
 
       {/* Mobile Drawer */}
       <Transition show={mobileMenuOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-50 lg:hidden" onClose={setMobileMenuOpen}>
+        <Dialog
+          as="div"
+          className="relative z-50 lg:hidden"
+          onClose={setMobileMenuOpen}
+        >
           <Transition.Child
             as={Fragment}
             enter="transition-opacity ease-out duration-200"
@@ -150,8 +189,13 @@ export default function Navbar() {
 
           <div className="fixed inset-y-0 left-0 w-64 bg-white dark:bg-gray-800 text-black dark:text-white p-4">
             <div className="flex justify-between items-center mb-4 border-b pb-2">
-              <span className="text-xl font-bold text-emerald-500">UniBazzar</span>
-              <button onClick={() => setMobileMenuOpen(false)} className="text-gray-800 dark:text-gray-300">
+              <span className="text-xl font-bold text-emerald-500">
+                UniBazzar
+              </span>
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-gray-800 dark:text-gray-300"
+              >
                 <XMarkIcon className="h-6 w-6" />
               </button>
             </div>
@@ -188,7 +232,9 @@ export default function Navbar() {
 
               {user ? (
                 <>
-                  <span className="text-gray-800 dark:text-gray-300">{user.name}</span>
+                  <span className="text-gray-800 dark:text-gray-300">
+                    {user.name}
+                  </span>
                   <button
                     onClick={() => {
                       handleLogout();
@@ -201,8 +247,20 @@ export default function Navbar() {
                 </>
               ) : (
                 <>
-                  <Link to="/login" className="hover:text-emerald-500 transition" onClick={() => setMobileMenuOpen(false)}>Login</Link>
-                  <Link to="/signup" className="bg-emerald-500 text-white px-4 py-1 rounded hover:bg-emerald-600 transition" onClick={() => setMobileMenuOpen(false)}>Sign Up</Link>
+                  <Link
+                    to="/login"
+                    className="hover:text-emerald-500 transition"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    to="/signup"
+                    className="bg-emerald-500 text-white px-4 py-1 rounded hover:bg-emerald-600 transition"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Sign Up
+                  </Link>
                 </>
               )}
             </div>

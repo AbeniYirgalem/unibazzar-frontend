@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import PrivateRoute from "./components/PrivateRoute";
@@ -20,8 +20,55 @@ import Chat from "./components/Chat/Chat";
 import { Toaster } from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { IoMoon, IoSunny } from "react-icons/io5"; // Import icons
+import ProfilePage from "./pages/ProfilePage";
+import PasswordResetPage from "./pages/PasswordResetPage";
+import UnauthorizedPage from "./pages/UnauthorizedPage";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserProfile, verifyToken } from "./redux/slices/authSlice";
 
-function App() {
+// Import profile form components
+import StudentProfileForm from "./pages/profile/forms/StudentProfileForm";
+import MerchantProfileForm from "./pages/profile/forms/MerchantProfileForm";
+import TutorProfileForm from "./pages/profile/forms/TutorProfileForm";
+import SignupCompletionHandler from "./components/SignupCompletionHandler";
+
+// Routes where Navbar and Footer should be hidden
+const noNavbarRoutes = [
+  "/login",
+  "/signup",
+  "/forgot-password",
+  "/reset-password",
+  "/profile/student/create",
+  "/profile/student/edit",
+  "/profile/merchant/create",
+  "/profile/merchant/edit",
+  "/profile/tutor/create",
+  "/profile/tutor/edit",
+  "/signup/complete",
+];
+
+// AppContent component to access route location
+function AppContent() {
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const { isAuthenticated } = useSelector((state) => state.auth);
+
+  // Check if the current path or its parent path is in the noNavbarRoutes list
+  const shouldShowNavbar = !noNavbarRoutes.some(
+    (route) =>
+      location.pathname === route || location.pathname.startsWith(route + "/")
+  );
+
+  // Fetch user profile and verify token on app initialization
+  useEffect(() => {
+    if (isAuthenticated) {
+      // Verify token and fetch user profile
+      dispatch(verifyToken());
+      console.log("App initialized, fetching user profile");
+      dispatch(fetchUserProfile());
+    }
+  }, [isAuthenticated, dispatch]);
+
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
@@ -46,21 +93,21 @@ function App() {
 
   return (
     <div className="min-h-screen bg-white text-gray-900 dark:bg-gray-900 dark:text-white">
-      <BrowserRouter>
-        <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
+      <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
 
-        {/* Theme Toggle Button */}
-        <div className="text-right p-4">
-          <button
-            onClick={toggleTheme}
-            className="text-2xl text-gray-800 dark:text-white focus:outline-none"
-            aria-label="Toggle Theme"
-          >
-            {isDarkMode ? <IoSunny /> : <IoMoon />}
-          </button>
-        </div>
+      {/* Theme Toggle Button */}
+      <div className="text-right p-4">
+        <button
+          onClick={toggleTheme}
+          className="text-2xl text-gray-800 dark:text-white focus:outline-none"
+          aria-label="Toggle Theme"
+        >
+          {isDarkMode ? <IoSunny /> : <IoMoon />}
+        </button>
+      </div>
 
-        <Navbar />
+      {shouldShowNavbar && <Navbar />}
+      <main className="flex-grow">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
@@ -71,8 +118,25 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/chat" element={<Chat />} />
+          <Route path="/unauthorized" element={<UnauthorizedPage />} />
+
+          {/* Password Reset Routes */}
+          <Route path="/forgot-password" element={<PasswordResetPage />} />
+          <Route path="/reset-password" element={<PasswordResetPage />} />
+          <Route
+            path="/reset-password/:uidb64/:token"
+            element={<PasswordResetPage />}
+          />
 
           {/* Protected Routes */}
+          <Route
+            path="/profile"
+            element={
+              <PrivateRoute>
+                <ProfilePage />
+              </PrivateRoute>
+            }
+          />
           <Route
             path="/create"
             element={
@@ -121,8 +185,98 @@ function App() {
               </PrivateRoute>
             }
           />
+          <Route
+            path="/merchant-dashboard"
+            element={
+              <PrivateRoute requiredRoles={["merchant"]}>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/tutor-dashboard"
+            element={
+              <PrivateRoute requiredRoles={["tutor"]}>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin-dashboard"
+            element={
+              <PrivateRoute requiredRoles={["campus_admin"]}>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
+
+          {/* Add signup completion routes */}
+          <Route
+            path="/signup/complete"
+            element={<SignupCompletionHandler />}
+          />
+          <Route
+            path="/profile/student/create"
+            element={
+              <PrivateRoute>
+                <StudentProfileForm mode="create" />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/profile/merchant/create"
+            element={
+              <PrivateRoute>
+                <MerchantProfileForm mode="create" />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/profile/tutor/create"
+            element={
+              <PrivateRoute>
+                <TutorProfileForm mode="create" />
+              </PrivateRoute>
+            }
+          />
+
+          {/* Edit profile routes */}
+          <Route
+            path="/profile/student/edit"
+            element={
+              <PrivateRoute requiredRoles={["student"]}>
+                <StudentProfileForm mode="edit" />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/profile/merchant/edit"
+            element={
+              <PrivateRoute requiredRoles={["merchant"]}>
+                <MerchantProfileForm mode="edit" />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/profile/tutor/edit"
+            element={
+              <PrivateRoute requiredRoles={["tutor"]}>
+                <TutorProfileForm mode="edit" />
+              </PrivateRoute>
+            }
+          />
         </Routes>
-        <Footer />
+      </main>
+      {shouldShowNavbar && <Footer />}
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <div className="flex flex-col min-h-screen">
+      <BrowserRouter>
+        <AppContent />
       </BrowserRouter>
     </div>
   );

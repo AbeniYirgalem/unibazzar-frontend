@@ -3,12 +3,14 @@ import { FaFacebook, FaTwitter, FaInstagram, FaTelegram } from "react-icons/fa";
 
 function Footer() {
   return (
-    <footer className="bg-black shadow-md mt-12 relative z-20">
+    <footer className="bg-black shadow-md relative z-20">
       <div className="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-3 gap-8 text-white">
         {/* UniBazzar Info */}
         <div>
-          <h2 className="text-2xl font-bold mb-2 text-white-300">UniBazzar</h2>
-          <p className="text-sm">
+          <h2 className="text-2xl font-bold mb-2 text-white-300 font-poppins">
+            UniBazzar
+          </h2>
+          <p className="text-sm font-inter">
             Connecting students across campuses with trusted local commerce —
             from books to tutoring and more.
           </p>
@@ -16,8 +18,10 @@ function Footer() {
 
         {/* Navigation Links */}
         <div>
-          <h3 className="text-md font-semibold mb-2">Quick Links</h3>
-          <ul className="space-y-1 text-sm">
+          <h3 className="text-md font-semibold mb-2 font-poppins">
+            Quick Links
+          </h3>
+          <ul className="space-y-1 text-sm font-inter">
             <li>
               <Link to="/account" className="hover:text-yellow-300">
                 Profile
@@ -43,7 +47,9 @@ function Footer() {
 
         {/* Social & Contact */}
         <div>
-          <h3 className="text-md font-semibold mb-2">Stay Connected</h3>
+          <h3 className="text-md font-semibold mb-2 font-poppins">
+            Stay Connected
+          </h3>
           <div className="flex space-x-4 text-xl text-white-300 mb-4">
             <a
               href="https://facebook.com"
@@ -74,14 +80,14 @@ function Footer() {
               <FaTelegram />
             </a>
           </div>
-          <p className="text-sm">
+          <p className="text-sm font-inter">
             Ethiopian Universities · 🌐 Telebirr Integrated
           </p>
         </div>
       </div>
 
       {/* Bottom Bar */}
-      <div className="bg-gray-900 text-center py-4 text-sm text-white">
+      <div className="bg-gray-900 text-center py-4 text-sm text-white font-inter">
         &copy; {new Date().getFullYear()} UniBazzar. All rights reserved.
       </div>
     </footer>
