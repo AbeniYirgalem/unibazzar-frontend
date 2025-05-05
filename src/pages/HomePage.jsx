@@ -105,8 +105,6 @@ function HomePage() {
         </div>
       </section>
 
-      <JoinCommunity />
-
       {/* How It Works Section */}
       <section className="py-20 bg-gradient-to-r from-gray-50 via-white to-gray-100 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800">
         <div className="max-w-7xl mx-auto px-6 text-center">
@@ -194,6 +192,8 @@ function HomePage() {
           </div>
         </div>
       </section>
+
+      <JoinCommunity />
     </div>
   );
 }

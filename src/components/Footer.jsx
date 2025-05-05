@@ -4,7 +4,7 @@ import { FaFacebook, FaTwitter, FaInstagram, FaTelegram } from "react-icons/fa";
 function Footer() {
   const currentYear = new Date().getFullYear();
   return (
-    <footer className="relative bg-black/70 dark:bg-[#0a1535]/80 backdrop-blur-xl overflow-hidden shadow-2xl z-20">
+    <footer className="relative bg-[#0a1535] dark:bg-[#0a1535]/80 backdrop-blur-xl overflow-hidden shadow-2xl z-20">
       {/* Glassmorphic & Glowing Background Effects */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute -bottom-20 -left-20 w-72 h-72 rounded-full bg-blue-400/20 blur-3xl animate-pulse-slow"></div>
@@ -13,44 +13,6 @@ function Footer() {
       </div>
 
       <div className="relative max-w-7xl mx-auto px-6 py-16">
-        {/* Newsletter Section */}
-        <div className="mb-10 md:mb-20 relative">
-          <div className="bg-gradient-to-r from-[#152B67]/80 to-blue-600/80 rounded-2xl shadow-xl p-4 sm:p-6 md:p-10 overflow-hidden relative border border-white/10 backdrop-blur-md">
-            {/* Background glow */}
-            <div className="absolute top-1/2 left-1/4 w-64 h-64 rounded-full bg-white/10 blur-3xl"></div>
-            <div className="absolute top-1/3 right-1/3 w-48 h-48 rounded-full bg-blue-300/20 blur-3xl"></div>
-            <div className="relative grid grid-cols-1 md:grid-cols-5 gap-6 md:gap-8 items-center">
-              <div className="md:col-span-3 text-center md:text-left">
-                <h3 className="text-white text-xl sm:text-2xl md:text-3xl font-bold mb-2 sm:mb-3 font-poppins">
-                  Stay updated with UniBazzar
-                </h3>
-                <p className="text-blue-100 text-xs sm:text-sm md:text-base font-inter max-w-md mx-auto md:mx-0">
-                  Join our community and receive the latest updates, news, and
-                  exclusive offers.
-                </p>
-              </div>
-              <div className="md:col-span-2 w-full">
-                <form className="flex flex-col sm:flex-row gap-3 w-full items-stretch sm:items-center justify-center md:justify-end">
-                  <input
-                    type="email"
-                    placeholder="Enter your email"
-                    className="w-full sm:w-auto px-3 sm:px-4 py-2 sm:py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white/10 backdrop-blur-sm text-white placeholder-blue-200 border border-white/20 transition-all duration-200 font-inter flex-1 min-w-0"
-                  />
-                  <button
-                    type="submit"
-                    className="w-full sm:w-auto bg-white hover:bg-blue-50 text-[#152B67] font-medium px-4 sm:px-6 py-2 sm:py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 group font-poppins"
-                  >
-                    Subscribe
-                    <span className="ml-1 group-hover:translate-x-1 transition-transform duration-200">
-                      →
-                    </span>
-                  </button>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-16">
           {/* UniBazzar Info */}
