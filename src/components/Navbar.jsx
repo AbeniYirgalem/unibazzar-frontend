@@ -251,7 +251,7 @@ export default function Navbar() {
             </button>
             <button
               type="button"
-              className="text-gray-800 dark:text-gray-200"
+              className="text-gray-800 dark:text-gray-200 cursor-pointer"
               onClick={() => setMobileMenuOpen(true)}
             >
               <Bars3Icon className="h-7 w-7" />
@@ -275,15 +275,18 @@ export default function Navbar() {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-black/30" />
+            <div
+              className="fixed inset-0 bg-black/30 z-40"
+              onClick={() => setMobileMenuOpen(false)}
+            />
           </Transition.Child>
-          <div className="fixed inset-y-0 left-0 w-72 bg-white/90 dark:bg-[#0a1535]/95 backdrop-blur-xl shadow-2xl p-4">
+          <Dialog.Panel className="fixed inset-y-0 left-0 w-72 bg-white/90 dark:bg-[#0a1535]/95 backdrop-blur-xl shadow-2xl p-4 z-50">
             <div className="flex justify-between items-center mb-4 border-b pb-2">
               <span className="flex items-center gap-2">
                 <motion.img
-                  src="/unibazzar-log.png"
+                  src="/assets/unibazzar-log.png"
                   alt="UniBazzar Logo"
-                  className="h-9 w-9 drop-shadow-lg rounded-full bg-white/30 p-1 border border-blue-200"
+                  className="h-9 w-9 drop-shadow-lg rounded-full bg-white/30 p-1 border border-blue-200 dark:bg-white/20"
                   initial={{ scale: 0.7, opacity: 0, rotate: -10 }}
                   animate={{ scale: 1, opacity: 1, rotate: 0 }}
                   transition={{ type: "spring", stiffness: 120, damping: 10 }}
@@ -294,7 +297,7 @@ export default function Navbar() {
               </span>
               <button
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-gray-800 dark:text-gray-300"
+                className="text-gray-800 dark:text-gray-300 cursor-pointer"
               >
                 <XMarkIcon className="h-6 w-6" />
               </button>
@@ -304,7 +307,7 @@ export default function Navbar() {
                 <Link
                   key={link.name}
                   to={link.path}
-                  className="hover:text-blue-500 transition font-medium"
+                  className="hover:text-blue-500 transition font-medium text-gray-800 dark:text-gray-100"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {link.name}
@@ -314,12 +317,12 @@ export default function Navbar() {
                 <>
                   <Link
                     to="/cart"
-                    className="hover:text-blue-500 transition"
+                    className="hover:text-blue-500 transition text-gray-800 dark:text-gray-100"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     Cart ({cartCount})
                   </Link>
-                  <span className="text-gray-800 dark:text-gray-300 font-semibold">
+                  <span className="text-gray-800 dark:text-gray-100 font-semibold">
                     {user.name}
                   </span>
                   <button
@@ -336,7 +339,7 @@ export default function Navbar() {
                 <>
                   <Link
                     to="/login"
-                    className="hover:text-blue-500 transition font-medium"
+                    className="hover:text-blue-500 transition font-medium text-gray-800 dark:text-gray-100"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     Login
@@ -351,7 +354,7 @@ export default function Navbar() {
                 </>
               )}
             </div>
-          </div>
+          </Dialog.Panel>
         </Dialog>
       </Transition>
     </nav>
