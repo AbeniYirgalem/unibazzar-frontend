@@ -11,7 +11,7 @@ import JoinCommunity from "../components/JoinCommunity";
 
 function HomePage() {
   return (
-    <div className="flex flex-col min-h-screen bg-white text-gray-900 dark:bg-gray-900 dark:text-white pt-20">
+    <div className="flex flex-col min-h-screen bg-white text-gray-900 dark:bg-gray-900 dark:text-white pt-10">
       {/* Hero Section */}
       <section
         className="relative bg-cover bg-center h-screen flex items-center justify-center"
@@ -22,7 +22,18 @@ function HomePage() {
         <div className="absolute inset-0 bg-black/60" />
         <div className="relative z-10 text-white text-center px-4 max-w-2xl p-8 rounded-lg drop-shadow-lg">
           <h1 className="text-5xl md:text-8xl font-extrabold mb-6">
-            Welcome to UniBazzar
+            <span className="text-white">Welcome to </span>
+            <span
+              className="bg-gradient-to-r from-[#172F6C] via-[#248BD6] via-40% via-[#5BE6FF] via-70% to-[#248BD6] bg-clip-text text-transparent animate-gradient-move font-extrabold"
+              style={{
+                backgroundImage:
+                  "linear-gradient(90deg, #172F6C 0%, #248BD6 40%, #5BE6FF 70%, #248BD6 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              UniBazzar
+            </span>
           </h1>
           <p className="text-xl md:text-2xl mb-8">
             Your one-stop campus marketplace for textbooks, notes, tutoring, and
@@ -188,3 +199,20 @@ function HomePage() {
 }
 
 export default HomePage;
+
+/* Add this to your global CSS (e.g., index.css or App.css):
+@keyframes glassFade {
+  0% {
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37), 0 0 0 0 rgba(59,130,246,0.3);
+    transform: scale(1) rotate(-1deg);
+  }
+  50% {
+    box-shadow: 0 12px 48px 0 rgba(59,130,246,0.25), 0 0 40px 10px rgba(59,130,246,0.15);
+    transform: scale(1.03) rotate(1deg);
+  }
+  100% {
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37), 0 0 0 0 rgba(59,130,246,0.3);
+    transform: scale(1) rotate(-1deg);
+  }
+}
+*/
