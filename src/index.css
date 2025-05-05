@@ -1,2 +1,20 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
+
+@keyframes toggle-rotate {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  40% {
+    transform: rotate(180deg) scale(1.2);
+  }
+  70% {
+    transform: rotate(300deg) scale(0.95);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+.animate-toggle-rotate {
+  animation: toggle-rotate 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}

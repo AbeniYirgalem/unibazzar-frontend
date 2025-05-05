@@ -17,6 +17,7 @@ export default function Navbar() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [isToggling, setIsToggling] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userMenuRef = useRef(null);
@@ -142,30 +143,27 @@ export default function Navbar() {
               </Link>
             ))}
             <button
-              onClick={toggleTheme}
-              className="relative text-2xl text-gray-800 dark:text-gray-300 transition focus:outline-none overflow-visible cursor-pointer hover:scale-110"
+              onClick={() => {
+                setIsToggling(true);
+                toggleTheme();
+                setTimeout(() => setIsToggling(false), 400);
+              }}
+              className="p-2 rounded-full hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors duration-200 text-2xl text-gray-800 dark:text-gray-300 focus:outline-none cursor-pointer group"
               aria-label="Toggle Theme"
             >
-              <motion.span
-                key={isDarkMode ? "sun" : "moon"}
-                initial={{ rotate: 0, scale: 0.7, opacity: 0 }}
-                animate={{ rotate: 360, scale: 1.2, opacity: 1 }}
-                exit={{ rotate: -180, scale: 0.7, opacity: 0 }}
-                transition={{
-                  duration: 0.5,
-                  type: "spring",
-                  stiffness: 200,
-                  damping: 15,
-                }}
-                className="inline-block"
-                style={{ willChange: "transform, opacity" }}
-              >
-                {isDarkMode ? (
-                  <IoSunny className="drop-shadow-[0_0_8px_rgba(15,107,174,0.7)]" />
-                ) : (
-                  <IoMoon className="drop-shadow-[0_0_8px_rgba(15,107,174,0.7)]" />
-                )}
-              </motion.span>
+              {isDarkMode ? (
+                <IoSunny
+                  className={`text-blue-400 text-2xl ${
+                    isToggling ? "animate-toggle-rotate" : ""
+                  }`}
+                />
+              ) : (
+                <IoMoon
+                  className={`text-blue-400 text-2xl ${
+                    isToggling ? "animate-toggle-rotate" : ""
+                  }`}
+                />
+              )}
             </button>
             {user ? (
               <>
@@ -238,9 +236,17 @@ export default function Navbar() {
               aria-label="Toggle Theme"
             >
               {isDarkMode ? (
-                <IoSunny className="text-blue-400" />
+                <IoSunny
+                  className={`text-blue-400 ${
+                    isToggling ? "animate-toggle-rotate" : ""
+                  }`}
+                />
               ) : (
-                <IoMoon className="text-blue-400" />
+                <IoMoon
+                  className={`text-blue-400 ${
+                    isToggling ? "animate-toggle-rotate" : ""
+                  }`}
+                />
               )}
             </button>
             <button
