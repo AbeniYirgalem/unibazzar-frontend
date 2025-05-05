@@ -284,7 +284,7 @@ export default function Navbar() {
             <div className="flex justify-between items-center mb-4 border-b pb-2">
               <span className="flex items-center gap-2">
                 <motion.img
-                  src="/assets/unibazzar-log.png"
+                  src="/assets/unibazzar_log.webp"
                   alt="UniBazzar Logo"
                   className="h-9 w-9 drop-shadow-lg rounded-full bg-white/30 p-1 border border-blue-200 dark:bg-white/20"
                   initial={{ scale: 0.7, opacity: 0, rotate: -10 }}
