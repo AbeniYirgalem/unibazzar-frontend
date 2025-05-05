@@ -9,7 +9,8 @@ const products = [
     id: 1,
     name: "Wireless Headphones",
     price: 299.99,
-    image: "/assets/pexels-rdne-7683731.jpg",
+    image:
+      "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/airpods-max-select-202409-midnight_FV1?wid=976&hei=916&fmt=jpeg&qlt=90&.v=azQxRkVJKzd6V3J0aGNqWFhLMzBmdmVWNWdHYnp5cHkwMldsSElEOHpyd0cyWGRFNFZ5QTk3bFlteis2Q2NNaWpENFdPQTN0TWQ4ejhtTWxrUHVDeElGZGV2eWhZaEljUzNSeDlxcDVuWGszbTFldUtUQzN0ellEWHZ3UUFYSS8",
     rating: 4.8,
     category: "Electronics",
     isNew: true,
@@ -19,7 +20,7 @@ const products = [
     name: "Calculus Textbook",
     price: 49.99,
     image:
-      "https://images.pexels.com/photos/1181671/pexels-photo-1181671.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/256369/pexels-photo-256369.jpeg?auto=compress&fit=crop&w=600&q=80",
     rating: 4.7,
     category: "Books",
   },
@@ -28,7 +29,7 @@ const products = [
     name: "Laptop Stand",
     price: 24.99,
     image:
-      "https://images.pexels.com/photos/264547/pexels-photo-264547.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/18105/pexels-photo.jpg?auto=compress&fit=crop&w=600&q=80", // Laptop
     rating: 4.9,
     category: "Accessories",
     isNew: true,
@@ -38,7 +39,7 @@ const products = [
     name: "Scientific Calculator",
     price: 19.99,
     image:
-      "https://images.pexels.com/photos/4145197/pexels-photo-4145197.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/220301/pexels-photo-220301.jpeg?auto=compress&fit=crop&w=600&q=80",
     rating: 4.6,
     category: "Electronics",
   },
