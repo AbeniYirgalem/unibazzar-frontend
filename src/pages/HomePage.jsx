@@ -8,6 +8,9 @@ import {
   Quote,
 } from "lucide-react";
 import JoinCommunity from "../components/JoinCommunity";
+import CatagorySection from "../components/CategorySection";
+import FeaturedProduct from "../components/FeaturedProduct";
+import TestimonialSection from "../components/TestimonialSection";
 
 function HomePage() {
   return (
@@ -63,7 +66,8 @@ function HomePage() {
           </Link>
         </div>
       </section>
-
+      <CatagorySection />
+      <FeaturedProduct />
       {/* What You Can Do Section */}
       <section className="py-20 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-6 text-center">
@@ -147,51 +151,7 @@ function HomePage() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="bg-gradient-to-r from-blue-50 to-white dark:from-gray-700 dark:to-gray-800 py-20">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-14">
-            What Our Users Say
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-            {[
-              {
-                name: "Hassan Abdi",
-                university: "Addis Ababa University",
-                quote:
-                  "UniBazzar helped me save money and time by connecting directly with sellers on campus!",
-              },
-              {
-                name: "Liya Teshome",
-                university: "Haramaya University",
-                quote:
-                  "I sold my old books within a day! This platform really helps students help each other.",
-              },
-              {
-                name: "Samuel Birhanu",
-                university: "Bahir Dar University",
-                quote:
-                  "The Telebirr integration makes paying super easy and secure. Highly recommended!",
-              },
-            ].map((item, index) => (
-              <div
-                key={index}
-                className="bg-gray-50 dark:bg-gray-700 p-8 rounded-2xl shadow-md hover:shadow-lg transition duration-300 text-left"
-              >
-                <Quote className="w-8 h-8 text-blue-500 mb-4" />
-                <p className="text-gray-700 dark:text-gray-200 italic mb-6">
-                  “{item.quote}”
-                </p>
-                <p className="font-semibold text-gray-900 dark:text-white">
-                  {item.name}
-                </p>
-                <p className="text-sm text-gray-500 dark:text-gray-300">
-                  {item.university}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <TestimonialSection />
 
       <JoinCommunity />
     </div>
