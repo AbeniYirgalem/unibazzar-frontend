@@ -1,162 +1,253 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { FiSearch, FiShoppingCart } from "react-icons/fi";
-import listingsData from "../mock/listings.json";
-import CategoryButtons from "../components/CategoryButtons";
-import { CardBody, CardContainer, CardItem } from "../components/ui/3d-card";
-import { useDispatch, useSelector } from "react-redux";
-import { addToCart, removeFromCart } from "../redux/slices/cartSlice";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../redux/slices/cartSlice";
+import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs";
+import ProductGrid from "../components/product/ProductGrid";
+// import { toast } from "react-toastify"; // Remove if not installed
 
-function MarketplacePage() {
-  const [listings, setListings] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [showSearch, setShowSearch] = useState(false);
+const API_BASE = "http://localhost:8000/api/products";
+
+const MarketplacePage = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const queryParams = new URLSearchParams(location.search);
+  const categoryParam = queryParams.get("category");
+
+  const [merchantProducts, setMerchantProducts] = useState([]);
+  const [studentProducts, setStudentProducts] = useState([]);
+  const [tutorServices, setTutorServices] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [activeTab, setActiveTab] = useState("all");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+
   const dispatch = useDispatch();
 
-  // 🔁 Select items in cart
-  const cartItems = useSelector((state) => state.cart.cartItems);
+  // Replace with your actual auth token logic
+  const getAuthToken = () => localStorage.getItem("token");
 
-  useEffect(() => {
-    setListings(listingsData);
-  }, []);
-
-  const handleCategoryChange = (category) => {
-    setSelectedCategory(category);
+  // Helper to fetch and check for JSON response
+  const safeFetch = async (url) => {
+    const res = await fetch(url, {
+      headers: { Authorization: `Bearer ${getAuthToken()}` },
+    });
+    const contentType = res.headers.get("content-type");
+    if (!res.ok) {
+      throw new Error(`Network error: ${res.status}`);
+    }
+    if (!contentType || !contentType.includes("application/json")) {
+      const text = await res.text();
+      throw new Error("Expected JSON, got: " + text.slice(0, 100));
+    }
+    return res.json();
   };
 
-  const filteredListings = listings
-    .filter(
-      (item) => selectedCategory === "All" || item.category === selectedCategory
-    )
-    .filter((item) =>
-      item.title.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+  // Fetch all product types and categories on mount
+  useEffect(() => {
+    if (!getAuthToken()) {
+      navigate("/login");
+      return;
+    }
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const [merchantData, studentData, tutorData, categoriesData] =
+          await Promise.all([
+            safeFetch(`http://localhost:8000/api/products/merchant-products/`),
+            safeFetch(`http://localhost:8000/api/products/student-products/`),
+            safeFetch(`http://localhost:8000/api/products/tutor-services/`),
+            safeFetch(`http://localhost:8000/api/products/categories/`),
+          ]);
+        setMerchantProducts(
+          Array.isArray(merchantData.results) ? merchantData.results : []
+        );
+        setStudentProducts(
+          Array.isArray(studentData.results) ? studentData.results : []
+        );
+        setTutorServices(
+          Array.isArray(tutorData.results) ? tutorData.results : []
+        );
+        setCategories(Array.isArray(categoriesData) ? categoriesData : []);
+        // If category is provided in URL, select it
+        if (categoryParam) {
+          const category = (
+            Array.isArray(categoriesData) ? categoriesData : []
+          ).find(
+            (c) =>
+              c.name && c.name.toLowerCase() === categoryParam.toLowerCase()
+          );
+          if (category) {
+            setSelectedCategory(category.id);
+          }
+        }
+      } catch (err) {
+        setError(err.message);
+        setCategories([]); // Ensure categories is always an array
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+    // eslint-disable-next-line
+  }, [categoryParam]);
 
-  const categories = [
-    "All",
-    "Notes",
-    "Textbooks",
-    "Tutoring",
-    "Food",
-    "Services",
+  // Filter products based on active tab and selected category, then randomize order
+  useEffect(() => {
+    let products = [];
+    switch (activeTab) {
+      case "merchant":
+        products = merchantProducts;
+        break;
+      case "student":
+        products = studentProducts;
+        break;
+      case "tutor":
+        products = tutorServices;
+        break;
+      case "all":
+      default:
+        products = [...merchantProducts, ...studentProducts, ...tutorServices];
+        break;
+    }
+    if (selectedCategory) {
+      products = products.filter(
+        (product) => product.category_id === selectedCategory
+      );
+    }
+    // Randomize the order of products
+    products = products.slice().sort(() => Math.random() - 0.5);
+    setFilteredProducts(products);
+  }, [
+    activeTab,
+    merchantProducts,
+    studentProducts,
+    tutorServices,
+    selectedCategory,
+  ]);
+
+  // Handle tab change
+  const handleTabChange = (value) => {
+    setActiveTab(value);
+  };
+
+  // Handle add to cart (no toast)
+  const handleAddToCart = (product) => {
+    dispatch(addToCart({ ...product, price: Number(product.price) }));
+  };
+
+  // Handle category selection
+  const handleCategorySelect = (categoryId) => {
+    setSelectedCategory(categoryId);
+  };
+
+  // Handle error clear
+  const clearError = () => setError(null);
+
+  // Build category filter buttons (including static types)
+  const staticCategories = [
+    { id: "all", name: "All" },
+    { id: "merchant", name: "Products" },
+    { id: "student", name: "Notes & Textbooks" },
+    { id: "tutor", name: "Tutoring" },
+    { id: "food", name: "Food" },
+  ];
+  // Merge API categories (if any) with static, avoiding duplicates
+  const allCategoryButtons = [
+    ...staticCategories,
+    ...categories.filter(
+      (cat) =>
+        !staticCategories.some(
+          (s) => s.name.toLowerCase() === cat.name?.toLowerCase()
+        )
+    ),
   ];
 
   return (
-    <div className="bg-white dark:bg-gray-900 text-black dark:text-white">
-      <div className="p-6 pt-16">
-        {/* Top Bar */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-          <CategoryButtons
-            categories={categories}
-            selectedCategory={selectedCategory}
-            onCategoryChange={handleCategoryChange}
-          />
-
-          {/* Search Bar */}
-          <div className="relative">
-            {showSearch ? (
-              <input
-                type="text"
-                placeholder="Search by title..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onBlur={() => setShowSearch(false)}
-                autoFocus
-                className="w-64 p-2.5 rounded-full border border-gray-300 focus:border-gray-400 focus:ring-0 focus:outline-none shadow-sm transition placeholder:text-sm placeholder:text-gray-500"
-              />
-            ) : (
-              <button
-                onClick={() => setShowSearch(true)}
-                className="p-2 rounded-full border border-gray-300 text-gray-600 hover:bg-gray-100 transition"
-              >
-                <FiSearch className="text-lg" />
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* Listings Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {filteredListings.map((item) => {
-            const isInCart = cartItems.some(
-              (cartItem) => cartItem.id === item.id
-            );
-
-            return (
-              <CardContainer
-                key={item.id}
-                className="group relative w-full max-w-sm mx-auto overflow-visible"
-              >
-                <CardBody className="relative bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg hover:shadow-xl transition duration-300 flex flex-col overflow-visible">
-                  <CardItem>
-                    <img
-                      src={item.imageUrl}
-                      alt={item.title}
-                      className="h-48 w-full object-cover rounded mb-4"
-                    />
-                  </CardItem>
-
-                  <CardItem>
-                    <h2 className="font-semibold text-lg text-gray-900 dark:text-white line-clamp-1 mb-1">
-                      {item.title}
-                    </h2>
-                    <p className="text-sm text-gray-500 dark:text-gray-200 mb-2">
-                      {item.category}
-                    </p>
-                    <p className="text-blue-600 font-bold text-lg mb-4">
-                      ${item.price}
-                    </p>
-                  </CardItem>
-
-                  {/* Cart Toggle Button */}
-                  <button
-                    onClick={() =>
-                      isInCart
-                        ? dispatch(removeFromCart(item.id))
-                        : dispatch(
-                            addToCart({
-                              id: item.id,
-                              title: item.title,
-                              price: item.price,
-                              imageUrl: item.imageUrl,
-                            })
-                          )
-                    }
-                    className={`absolute top-4 right-4 z-30 p-2 rounded-full border transition-colors duration-200 
-    ${
-      isInCart
-        ? "bg-blue-600 text-white border-blue-600 hover:bg-blue-700"
-        : "bg-white dark:bg-gray-800 text-gray-700 border-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-black"
-    }`}
-                    title={isInCart ? "Remove from Cart" : "Add to Cart"}
-                  >
-                    <FiShoppingCart className="text-xl" />
-                  </button>
-
-                  {/* Hover Buttons */}
-                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition duration-300 z-30 flex flex-col gap-2 pointer-events-auto">
-                    <Link
-                      to={`/listing/${item.id}`}
-                      className="bg-black text-white px-3 py-2 rounded text-sm hover:opacity-90 transition text-center"
-                    >
-                      See Preview
-                    </Link>
-                    <Link
-                      to={`/similar/${item.id}`}
-                      className="bg-black text-white px-3 py-2 rounded text-sm hover:opacity-90 transition text-center"
-                    >
-                      Similar Items
-                    </Link>
-                  </div>
-                </CardBody>
-              </CardContainer>
-            );
-          })}
-        </div>
+    <div className="space-y-6 pt-10 m-20">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <h1 className="text-2xl font-bold">Marketplace</h1>
+        <Tabs
+          value={activeTab}
+          onValueChange={handleTabChange}
+          className="w-full md:w-auto"
+        ></Tabs>
       </div>
+      {/* Category filter buttons */}
+      <div className="flex flex-wrap gap-2 mb-4 justify-center">
+        {allCategoryButtons.map((cat) => {
+          // Only show button if there are products for this category/type
+          let hasProducts = false;
+          if (cat.id === "all") {
+            hasProducts =
+              merchantProducts.length > 0 ||
+              studentProducts.length > 0 ||
+              tutorServices.length > 0;
+          } else if (cat.id === "merchant") {
+            hasProducts = merchantProducts.length > 0;
+          } else if (cat.id === "student") {
+            hasProducts = studentProducts.length > 0;
+          } else if (cat.id === "tutor") {
+            hasProducts = tutorServices.length > 0;
+          } else if (cat.id === "food") {
+            // If you have a foodProducts array, check it here. Otherwise, hide.
+            hasProducts = false;
+          } else {
+            // For dynamic categories, check if any product matches the category id
+            hasProducts = [
+              ...merchantProducts,
+              ...studentProducts,
+              ...tutorServices,
+            ].some((p) => p.category_id === cat.id);
+          }
+          if (!hasProducts) return null;
+          return (
+            <button
+              key={cat.id}
+              className={`px-3 py-1 rounded ${
+                activeTab === cat.id || selectedCategory === cat.id
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-200 dark:bg-gray-700 dark:text-gray-200"
+              }`}
+              onClick={() => {
+                if (
+                  ["all", "merchant", "student", "tutor", "food"].includes(
+                    cat.id
+                  )
+                ) {
+                  setActiveTab(cat.id);
+                  setSelectedCategory(null);
+                } else {
+                  setSelectedCategory(cat.id);
+                  setActiveTab("all");
+                }
+              }}
+            >
+              {cat.name}
+            </button>
+          );
+        })}
+      </div>
+      {error && (
+        <div className="bg-red-100 text-red-800 p-2 rounded mb-4">
+          {error}
+          <button className="ml-2 text-xs underline" onClick={clearError}>
+            Dismiss
+          </button>
+        </div>
+      )}
+      <ProductGrid
+        products={filteredProducts}
+        loading={loading}
+        error={error}
+        onAddToCart={handleAddToCart}
+        onClearError={clearError}
+      />
     </div>
   );
-}
+};
 
 export default MarketplacePage;

@@ -128,7 +128,7 @@ const FeaturedProduct = () => {
                   </span>
                 </div>
                 <span className="font-semibold text-gray-900 dark:text-white">
-                  ${product.price.toFixed(2)}
+                  ETB {product.price.toFixed(2)}
                 </span>
               </div>
             </div>
