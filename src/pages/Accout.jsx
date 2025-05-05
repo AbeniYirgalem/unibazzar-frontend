@@ -44,7 +44,7 @@ function Account() {
         <div className="flex items-center space-x-4">
           <div className="w-10 h-10 rounded-full bg-gray-300 overflow-hidden">
             <img
-              src="/assets/default_user.png"
+              src="/assets/default_user_1.webp"
               alt="Profile"
               className="w-full h-full object-cover"
             />
